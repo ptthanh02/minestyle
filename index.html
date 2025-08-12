@@ -12,9 +12,15 @@
         <div class="nav-container">
             <a href="#" class="logo">MineStyle</a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#" class="nav-link active" onclick="showSection('smallcaps')">Small Caps</a></li>
-                <li><a href="#" class="nav-link" onclick="showSection('minecraft')">Minecraft Colors</a></li>
-                <li><a href="#" class="nav-link" onclick="showSection('about')">About</a></li>
+                <li><a href="#" class="nav-link active" onclick="showSection('smallcaps')" data-key="nav-smallcaps">Small Caps</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('minecraft')" data-key="nav-minecraft">Minecraft Colors</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('about')" data-key="nav-about">About</a></li>
+                <li>
+                    <button class="language-btn" onclick="toggleLanguage()" title="Change Language">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMDAyNjY4Ii8+CjxyZWN0IHk9IjgiIHdpZHRoPSIyNCIgaGVpZ2h0PSI4IiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB5PSIxNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjgiIGZpbGw9IiNDRTExMjYiLz4KPC9zdmc+" id="languageFlag" alt="Language" class="flag-icon">
+                        <span id="languageText">EN</span>
+                    </button>
+                </li>
             </ul>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </div>
@@ -78,30 +84,6 @@
                         <button class="hex-apply-btn" onclick="applyHexColor()">Apply Color</button>
                     </div>
                     <div class="hex-preview" id="hexPreview">Custom colored text will appear here...</div>
-                </div>
-
-                <!-- Gradient Text Generator -->
-                <div class="gradient-section">
-                    <h3 style="margin-bottom: 15px; color: #8B4513;">🌈 Gradient Text Generator</h3>
-                    <div class="gradient-controls">
-                        <div class="gradient-input-group">
-                            <label for="gradientText">Text for gradient:</label>
-                            <input type="text" id="gradientText" class="gradient-text-input" placeholder="Enter text for gradient effect" maxlength="50">
-                        </div>
-                        <div class="gradient-color-group">
-                            <div class="gradient-color-picker">
-                                <label>Start Color:</label>
-                                <input type="color" id="gradientStartColor" class="color-picker" value="#FF5555">
-                            </div>
-                            <div class="gradient-color-picker">
-                                <label>End Color:</label>
-                                <input type="color" id="gradientEndColor" class="color-picker" value="#5555FF">
-                            </div>
-                            <button class="hex-apply-btn" onclick="generateGradient()">Generate Gradient</button>
-                        </div>
-                    </div>
-                    <div class="gradient-preview" id="gradientPreview">Gradient preview will appear here...</div>
-                    <div class="gradient-code" id="gradientCode"></div>
                 </div>
 
                 <!-- Formatting Presets -->
@@ -213,6 +195,30 @@
 
                 <textarea id="minecraftText" class="minecraft-input" placeholder="Type your text here or click colors above... Example: §eHello §bWorld§r!"></textarea>
                 <button class="clear-btn" onclick="clearMinecraft()">Clear Text</button>
+                
+                <!-- Gradient Text Generator (moved to bottom) -->
+                <div class="gradient-section">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">🌈 Gradient Text Generator</h3>
+                    <div class="gradient-controls">
+                        <div class="gradient-input-group">
+                            <label for="gradientText">Text for gradient:</label>
+                            <input type="text" id="gradientText" class="gradient-text-input" placeholder="Enter text for gradient effect" maxlength="50">
+                        </div>
+                        <div class="gradient-color-group">
+                            <div class="gradient-color-picker">
+                                <label>Start Color:</label>
+                                <input type="color" id="gradientStartColor" class="color-picker" value="#FF5555">
+                            </div>
+                            <div class="gradient-color-picker">
+                                <label>End Color:</label>
+                                <input type="color" id="gradientEndColor" class="color-picker" value="#5555FF">
+                            </div>
+                            <button class="hex-apply-btn" onclick="generateGradient()">Generate Gradient</button>
+                        </div>
+                    </div>
+                    <div class="gradient-preview" id="gradientPreview">Gradient preview will appear here...</div>
+                    <div class="gradient-code" id="gradientCode"></div>
+                </div>
             </div>
 
             <div class="output-section full-width">

@@ -8,13 +8,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: 
-        /* Subtle Minecraft-inspired pattern overlay */
-        radial-gradient(circle at 20px 20px, rgba(92, 51, 23, 0.05) 2px, transparent 2px),
-        radial-gradient(circle at 60px 60px, rgba(34, 139, 34, 0.03) 2px, transparent 2px),
-        /* Main modern gradient background */
-        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    background-size: 40px 40px, 80px 80px, 100% 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     min-height: 100vh;
     color: #333;
 }
@@ -80,6 +74,38 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     color: #333;
+}
+
+/* Language Button */
+.language-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    font-weight: 600;
+}
+
+.language-btn:hover {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.flag-icon {
+    width: 20px;
+    height: 15px;
+    border-radius: 3px;
+}
+
+#languageText {
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 /* Main Container */
