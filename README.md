@@ -1,0 +1,1 @@
+help me add the hex color chooser for minecraft color and change it the way it navigate into a navbar for profession web look
