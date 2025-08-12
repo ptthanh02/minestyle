@@ -69,7 +69,7 @@
             <div class="input-section">
                 <label for="minecraftText">Enter your Minecraft text:</label>
                 
-                <!-- Hex Color Chooser -->
+                <!-- Custom Hex Color -->
                 <div class="hex-color-section">
                     <h3 style="margin-bottom: 15px; color: #333;">Custom Hex Color</h3>
                     <div class="hex-input-group">
@@ -78,6 +78,61 @@
                         <button class="hex-apply-btn" onclick="applyHexColor()">Apply Color</button>
                     </div>
                     <div class="hex-preview" id="hexPreview">Custom colored text will appear here...</div>
+                </div>
+
+                <!-- Gradient Text Generator -->
+                <div class="gradient-section">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">🌈 Gradient Text Generator</h3>
+                    <div class="gradient-controls">
+                        <div class="gradient-input-group">
+                            <label for="gradientText">Text for gradient:</label>
+                            <input type="text" id="gradientText" class="gradient-text-input" placeholder="Enter text for gradient effect" maxlength="50">
+                        </div>
+                        <div class="gradient-color-group">
+                            <div class="gradient-color-picker">
+                                <label>Start Color:</label>
+                                <input type="color" id="gradientStartColor" class="color-picker" value="#FF5555">
+                            </div>
+                            <div class="gradient-color-picker">
+                                <label>End Color:</label>
+                                <input type="color" id="gradientEndColor" class="color-picker" value="#5555FF">
+                            </div>
+                            <button class="hex-apply-btn" onclick="generateGradient()">Generate Gradient</button>
+                        </div>
+                    </div>
+                    <div class="gradient-preview" id="gradientPreview">Gradient preview will appear here...</div>
+                    <div class="gradient-code" id="gradientCode"></div>
+                </div>
+
+                <!-- Formatting Presets -->
+                <div class="presets-section">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">⚡ Quick Presets</h3>
+                    <div class="presets-grid">
+                        <button class="preset-btn" onclick="applyPreset('welcome')" title="Server Welcome Message">
+                            <span class="preset-name">Server Welcome</span>
+                            <span class="preset-preview">§eWelcome to §bOur Server§e!</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyPreset('error')" title="Error Message">
+                            <span class="preset-name">Error Message</span>
+                            <span class="preset-preview">§c§l[ERROR]§r §cSomething went wrong!</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyPreset('success')" title="Success Message">
+                            <span class="preset-name">Success</span>
+                            <span class="preset-preview">§a§l[SUCCESS]§r §aAction completed!</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyPreset('rainbow')" title="Rainbow Text">
+                            <span class="preset-name">Rainbow</span>
+                            <span class="preset-preview">§cR§6a§ei§an§bb§9o§dw</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyPreset('warning')" title="Warning Message">
+                            <span class="preset-name">Warning</span>
+                            <span class="preset-preview">§6§l[WARNING]§r §6Be careful!</span>
+                        </button>
+                        <button class="preset-btn" onclick="applyPreset('info')" title="Information Message">
+                            <span class="preset-name">Info</span>
+                            <span class="preset-preview">§b§l[INFO]§r §bHere's some info</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="color-palette">

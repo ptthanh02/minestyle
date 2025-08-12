@@ -578,6 +578,162 @@ textarea:focus {
         inset -1px -1px 0 rgba(255, 255, 255, 0.8);
 }
 
+/* Gradient Text Generator - Minecraft Style */
+.gradient-section {
+    background: linear-gradient(145deg, #FFB6C1, #FFC0CB);
+    border: 3px solid #FF69B4;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+        inset -1px -1px 0 rgba(0, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.3);
+    image-rendering: pixelated;
+}
+
+.gradient-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gradient-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.gradient-input-group label {
+    font-size: 10px;
+    color: #8B4513;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.gradient-text-input {
+    padding: 8px;
+    border: 2px solid #8B4513;
+    font-size: 10px;
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(145deg, #FFFACD, #F5F5DC);
+    color: #2F4F2F;
+    box-shadow: 
+        inset 1px 1px 0 rgba(0, 0, 0, 0.2),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.gradient-color-group {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.gradient-color-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.gradient-color-picker label {
+    font-size: 9px;
+    color: #8B4513;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.gradient-preview {
+    margin-top: 12px;
+    padding: 12px;
+    border: 2px solid #8B4513;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    min-height: 40px;
+    background: linear-gradient(145deg, #2F2F2F, #1C1C1C);
+    color: #ffffff;
+    box-shadow: 
+        inset 2px 2px 0 rgba(0, 0, 0, 0.3),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.gradient-code {
+    margin-top: 8px;
+    padding: 8px;
+    border: 2px solid #8B4513;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    background: linear-gradient(145deg, #FFFACD, #F5F5DC);
+    color: #2F4F2F;
+    box-shadow: 
+        inset 1px 1px 0 rgba(0, 0, 0, 0.2),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.8);
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+/* Formatting Presets - Minecraft Style */
+.presets-section {
+    background: linear-gradient(145deg, #DDA0DD, #DA70D6);
+    border: 3px solid #8B008B;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+        inset -1px -1px 0 rgba(0, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.3);
+    image-rendering: pixelated;
+}
+
+.presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.preset-btn {
+    background: linear-gradient(145deg, #F0E68C, #DAA520);
+    border: 2px solid #B8860B;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: #8B4513;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+        inset -1px -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.preset-btn:hover {
+    background: linear-gradient(145deg, #FFFF99, #F0E68C);
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+        inset -1px -1px 0 rgba(0, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.preset-btn:active {
+    transform: translateY(0px);
+    box-shadow: 
+        inset 2px 2px 0 rgba(0, 0, 0, 0.2),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.preset-name {
+    font-weight: 400;
+    color: #8B4513;
+}
+
+.preset-preview {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    color: #654321;
+    opacity: 0.8;
+}
+
 /* About Page Styles - Minecraft Themed */
 .feature-grid {
     display: grid;
@@ -714,6 +870,38 @@ textarea:focus {
     .hex-apply-btn {
         font-size: 9px;
         padding: 6px 12px;
+    }
+
+    .gradient-section {
+        padding: 12px;
+    }
+
+    .gradient-color-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .gradient-text-input {
+        font-size: 9px;
+    }
+
+    .presets-section {
+        padding: 12px;
+    }
+
+    .presets-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .preset-btn {
+        padding: 6px;
+        font-size: 7px;
+    }
+
+    .preset-preview {
+        font-size: 6px;
     }
 
     .feature-grid {

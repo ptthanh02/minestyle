@@ -29,6 +29,23 @@ const hexInput = document.getElementById('hexInput');
 const colorPicker = document.getElementById('colorPicker');
 const hexPreview = document.getElementById('hexPreview');
 
+// New gradient elements
+const gradientText = document.getElementById('gradientText');
+const gradientStartColor = document.getElementById('gradientStartColor');
+const gradientEndColor = document.getElementById('gradientEndColor');
+const gradientPreview = document.getElementById('gradientPreview');
+const gradientCode = document.getElementById('gradientCode');
+
+// Preset templates
+const presetTemplates = {
+    welcome: '§eWelcome to §bOur Server§e! §aEnjoy your stay!',
+    error: '§c§l[ERROR]§r §cSomething went wrong! Please try again.',
+    success: '§a§l[SUCCESS]§r §aAction completed successfully!',
+    warning: '§6§l[WARNING]§r §6Please be careful with this action.',
+    info: '§b§l[INFO]§r §bHere is some important information.',
+    rainbow: '§cR§6a§ei§an§bb§9o§dw §cT§6e§ex§at'
+};
+
 /**
  * Navigation functions
  */
@@ -79,6 +96,166 @@ function updateOutputs() {
     // Unicode Small Caps
     const unicodeText = convertToUnicodeSmallCaps(text);
     unicodeOutput.innerHTML = `<button class="copy-btn" onclick="copyText('unicodeOutput')">Copy</button>${unicodeText}`;
+}
+
+/**
+ * Color utility functions
+ */
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function interpolateColor(color1, color2, factor) {
+    const rgb1 = hexToRgb(color1);
+    const rgb2 = hexToRgb(color2);
+    
+    if (!rgb1 || !rgb2) return color1;
+    
+    const r = Math.round(rgb1.r + factor * (rgb2.r - rgb1.r));
+    const g = Math.round(rgb1.g + factor * (rgb2.g - rgb1.g));
+    const b = Math.round(rgb1.b + factor * (rgb2.b - rgb1.b));
+    
+    return rgbToHex(r, g, b);
+}
+
+/**
+ * Gradient text generation
+ */
+function generateGradient() {
+    const text = gradientText.value.trim();
+    const startColor = gradientStartColor.value;
+    const endColor = gradientEndColor.value;
+    
+    if (!text) {
+        gradientPreview.innerHTML = 'Enter text to generate gradient...';
+        gradientCode.innerHTML = '';
+        return;
+    }
+    
+    if (text.length > 50) {
+        alert('Text too long! Maximum 50 characters for gradient effect.');
+        return;
+    }
+    
+    let gradientCode = '';
+    let previewHtml = '';
+    
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (char === ' ') {
+            gradientCode += ' ';
+            previewHtml += '&nbsp;';
+            continue;
+        }
+        
+        const factor = text.length === 1 ? 0 : i / (text.length - 1);
+        const interpolatedColor = interpolateColor(startColor, endColor, factor);
+        const hexCode = '§#' + interpolatedColor.substring(1).toUpperCase();
+        
+        // Store the custom color
+        customHexColors[hexCode] = interpolatedColor;
+        
+        gradientCode += hexCode + char;
+        previewHtml += `<span style="color: ${interpolatedColor};">${char}</span>`;
+    }
+    
+    gradientPreview.innerHTML = previewHtml;
+    document.getElementById('gradientCode').innerHTML = 
+        `<strong>Gradient Code:</strong><br>${gradientCode}<br><br>` +
+        `<button class="copy-btn" style="position: static; opacity: 1; margin-top: 8px;" onclick="copyGradientCode()">Copy Gradient Code</button>`;
+}
+
+function copyGradientCode() {
+    const text = gradientText.value.trim();
+    const startColor = gradientStartColor.value;
+    const endColor = gradientEndColor.value;
+    
+    if (!text) return;
+    
+    let gradientCode = '';
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (char === ' ') {
+            gradientCode += ' ';
+            continue;
+        }
+        
+        const factor = text.length === 1 ? 0 : i / (text.length - 1);
+        const interpolatedColor = interpolateColor(startColor, endColor, factor);
+        const hexCode = '§#' + interpolatedColor.substring(1).toUpperCase();
+        
+        gradientCode += hexCode + char;
+    }
+    
+    navigator.clipboard.writeText(gradientCode).then(() => {
+        const button = document.querySelector('.gradient-code .copy-btn');
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy gradient code: ', err);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = gradientCode;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const button = document.querySelector('.gradient-code .copy-btn');
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(() => {
+            button.textContent = 'Copy Gradient Code';
+            button.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+/**
+ * Preset functions
+ */
+function applyPreset(presetName) {
+    const template = presetTemplates[presetName];
+    if (!template) return;
+    
+    if (presetName === 'rainbow') {
+        // Generate dynamic rainbow text
+        const baseText = 'Rainbow Text';
+        const rainbowColors = ['§c', '§6', '§e', '§a', '§b', '§9', '§d'];
+        let rainbowCode = '';
+        
+        for (let i = 0; i < baseText.length; i++) {
+            const char = baseText[i];
+            if (char === ' ') {
+                rainbowCode += ' ';
+            } else {
+                const colorIndex = i % rainbowColors.length;
+                rainbowCode += rainbowColors[colorIndex] + char;
+            }
+        }
+        
+        minecraftText.value = rainbowCode;
+    } else {
+        minecraftText.value = template;
+    }
+    
+    updateMinecraftPreview();
+    minecraftText.focus();
 }
 
 /**
@@ -312,6 +489,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (minecraftText) minecraftText.addEventListener('input', updateMinecraftPreview);
     if (hexInput) hexInput.addEventListener('input', updateHexPreview);
     
+    // Gradient event listeners
+    if (gradientText) gradientText.addEventListener('input', generateGradient);
+    if (gradientStartColor) gradientStartColor.addEventListener('change', generateGradient);
+    if (gradientEndColor) gradientEndColor.addEventListener('change', generateGradient);
+    
     // Sync color picker with hex input
     if (colorPicker) {
         colorPicker.addEventListener('input', function() {
@@ -325,6 +507,15 @@ document.addEventListener('DOMContentLoaded', function() {
         hexInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 applyHexColor();
+            }
+        });
+    }
+
+    // Handle Enter key in gradient text input
+    if (gradientText) {
+        gradientText.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateGradient();
             }
         });
     }
