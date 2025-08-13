@@ -218,6 +218,29 @@ textarea:focus {
     display: flex;
     align-items: center;
     gap: 8px;
+    justify-content: space-between;
+}
+
+.format-selector {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.85em;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.format-selector:hover {
+    border-color: #667eea;
+    background: #fff;
+}
+
+.format-selector:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
 }
 
 .badge {
@@ -237,13 +260,21 @@ textarea:focus {
     min-height: 100px;
     font-size: 16px;
     line-height: 1.5;
-    cursor: text;
+    cursor: pointer;
     position: relative;
     transition: all 0.3s ease;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    text-align: left;
+    vertical-align: top;
 }
 
 .output-text:hover {
     border-color: #667eea;
+    background: #f8f9ff;
 }
 
 .css-small-caps {
@@ -566,6 +597,8 @@ textarea:focus {
     font-style: italic;
     color: #888;
     margin-top: 5px;
+    display: block;
+    text-align: left;
 }
 
 /* Gradient Text Generator - Modern Style */
@@ -710,5 +743,128 @@ textarea:focus {
     font-size: 12px;
     opacity: 0.9;
     font-family: 'Courier New', monospace;
+}
+
+/* Minecraft Navigation Dropdown */
+.minecraft-nav {
+    margin: 2rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.minecraft-nav-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 300px;
+}
+
+.minecraft-nav-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+.minecraft-nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+}
+
+.minecraft-nav-button.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.minecraft-nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.minecraft-nav-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.minecraft-nav-item {
+    display: block;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+}
+
+.minecraft-nav-item:last-child {
+    border-bottom: none;
+}
+
+.minecraft-nav-item:hover {
+    background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
+    color: #667eea;
+    transform: translateX(5px);
+}
+
+.minecraft-nav-item.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.minecraft-nav-item.active:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a42a0);
+    transform: translateX(0);
+}
+
+/* Minecraft Tools */
+.minecraft-tool {
+    display: none;
+}
+
+.minecraft-tool.active {
+    display: block;
+}
+
+/* Mobile Responsiveness for Minecraft Nav */
+@media (max-width: 768px) {
+    .minecraft-nav-dropdown {
+        width: 100%;
+    }
+    
+    .minecraft-nav-button {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    
+    .minecraft-nav-item {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
 }
 }

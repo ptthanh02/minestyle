@@ -66,181 +66,275 @@
             <h1 class="section-title">Minecraft Text Colors</h1>
             <p class="section-subtitle">Create colorful Minecraft text with custom hex colors!</p>
             
-            <div class="input-section">
-                <label for="minecraftText">Enter your Minecraft text:</label>
-                
-                <!-- Custom Hex Color -->
-                <div class="hex-color-section">
-                    <h3 style="margin-bottom: 15px; color: #333;">Custom Hex Color</h3>
-                    <div class="hex-input-group">
-                        <input type="text" id="hexInput" class="hex-input" placeholder="#FF5555 or FF5555" maxlength="7">
-                        <input type="color" id="colorPicker" class="color-picker" value="#FF5555">
-                        <button class="hex-apply-btn" onclick="applyHexColor()">Apply Color</button>
-                    </div>
-                    <div class="hex-preview" id="hexPreview">Custom colored text will appear here...</div>
-                </div>
-
-                <!-- Formatting Presets -->
-                <div class="presets-section">
-                    <h3 style="margin-bottom: 15px; color: #8B4513;">⚡ Quick Presets</h3>
-                    <div class="presets-grid">
-                        <button class="preset-btn" onclick="applyPreset('welcome')" title="Server Welcome Message">
-                            <span class="preset-name">Server Welcome</span>
-                            <span class="preset-preview">§eWelcome to §bOur Server§e!</span>
-                        </button>
-                        <button class="preset-btn" onclick="applyPreset('error')" title="Error Message">
-                            <span class="preset-name">Error Message</span>
-                            <span class="preset-preview">§c§l[ERROR]§r §cSomething went wrong!</span>
-                        </button>
-                        <button class="preset-btn" onclick="applyPreset('success')" title="Success Message">
-                            <span class="preset-name">Success</span>
-                            <span class="preset-preview">§a§l[SUCCESS]§r §aAction completed!</span>
-                        </button>
-                        <button class="preset-btn" onclick="applyPreset('rainbow')" title="Rainbow Text">
-                            <span class="preset-name">Rainbow</span>
-                            <span class="preset-preview">§cR§6a§ei§an§bb§9o§dw</span>
-                        </button>
-                        <button class="preset-btn" onclick="applyPreset('warning')" title="Warning Message">
-                            <span class="preset-name">Warning</span>
-                            <span class="preset-preview">§6§l[WARNING]§r §6Be careful!</span>
-                        </button>
-                        <button class="preset-btn" onclick="applyPreset('info')" title="Information Message">
-                            <span class="preset-name">Info</span>
-                            <span class="preset-preview">§b§l[INFO]§r §bHere's some info</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="color-palette">
-                    <div class="color-item" onclick="insertCode('§0')" title="Black">
-                        <div class="color-preview" style="background-color: #000000;"></div>
-                        <span>§0 Black</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§1')" title="Dark Blue">
-                        <div class="color-preview" style="background-color: #0000AA;"></div>
-                        <span>§1 Dark Blue</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§2')" title="Dark Green">
-                        <div class="color-preview" style="background-color: #00AA00;"></div>
-                        <span>§2 Dark Green</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§3')" title="Dark Aqua">
-                        <div class="color-preview" style="background-color: #00AAAA;"></div>
-                        <span>§3 Dark Aqua</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§4')" title="Dark Red">
-                        <div class="color-preview" style="background-color: #AA0000;"></div>
-                        <span>§4 Dark Red</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§5')" title="Dark Purple">
-                        <div class="color-preview" style="background-color: #AA00AA;"></div>
-                        <span>§5 Dark Purple</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§6')" title="Gold">
-                        <div class="color-preview" style="background-color: #FFAA00;"></div>
-                        <span>§6 Gold</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§7')" title="Gray">
-                        <div class="color-preview" style="background-color: #AAAAAA;"></div>
-                        <span>§7 Gray</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§8')" title="Dark Gray">
-                        <div class="color-preview" style="background-color: #555555;"></div>
-                        <span>§8 Dark Gray</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§9')" title="Blue">
-                        <div class="color-preview" style="background-color: #5555FF;"></div>
-                        <span>§9 Blue</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§a')" title="Green">
-                        <div class="color-preview" style="background-color: #55FF55;"></div>
-                        <span>§a Green</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§b')" title="Aqua">
-                        <div class="color-preview" style="background-color: #55FFFF;"></div>
-                        <span>§b Aqua</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§c')" title="Red">
-                        <div class="color-preview" style="background-color: #FF5555;"></div>
-                        <span>§c Red</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§d')" title="Light Purple">
-                        <div class="color-preview" style="background-color: #FF55FF;"></div>
-                        <span>§d Light Purple</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§e')" title="Yellow">
-                        <div class="color-preview" style="background-color: #FFFF55;"></div>
-                        <span>§e Yellow</span>
-                    </div>
-                    <div class="color-item" onclick="insertCode('§f')" title="White">
-                        <div class="color-preview" style="background-color: #FFFFFF;"></div>
-                        <span>§f White</span>
-                    </div>
-                </div>
-
-                <div class="format-buttons">
-                    <button class="format-btn" onclick="insertCode('§l')" title="Bold">§l Bold</button>
-                    <button class="format-btn" onclick="insertCode('§o')" title="Italic">§o Italic</button>
-                    <button class="format-btn" onclick="insertCode('§n')" title="Underline">§n Underline</button>
-                    <button class="format-btn" onclick="insertCode('§m')" title="Strikethrough">§m Strike</button>
-                    <button class="format-btn" onclick="insertCode('§k')" title="Obfuscated">§k Magic</button>
-                    <button class="format-btn" onclick="insertCode('§r')" title="Reset">§r Reset</button>
-                </div>
-
-                <textarea id="minecraftText" class="minecraft-input" placeholder="Type your text here or click colors above... Example: §eHello §bWorld§r!"></textarea>
-                <button class="clear-btn" onclick="clearMinecraft()">Clear Text</button>
-            </div>
-
-            <div class="output-section full-width">
-                <div class="output-box">
-                    <div class="output-title">
-                        Minecraft Text Preview <span class="badge">Live Preview</span>
-                    </div>
-                    <div class="minecraft-preview" id="minecraftPreview">
-                        Start typing to see your colorful Minecraft text here...
-                    </div>
-                    <div class="description">
-                        Preview how your text will look in Minecraft. Copy the code above to use in-game!
-                    </div>
-                </div>
-
-                <div class="output-box">
-                    <div class="output-title">
-                        Copy-Ready Code <span class="badge">Game Ready</span>
-                    </div>
-                    <div class="output-text" id="minecraftCode">
-                        <button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>
-                        <span class="example-text">Minecraft color codes will appear here...</span>
-                    </div>
-                    <div class="description">
-                        Raw Minecraft color codes ready to paste into your server, plugin, or game. Supports both § and & formats.
+            <!-- Sub-navigation for Minecraft Tools -->
+            <div class="minecraft-nav">
+                <div class="minecraft-nav-dropdown">
+                    <button class="minecraft-nav-button" onclick="toggleMinecraftDropdown()">
+                        <span id="currentMinecraftTool">Custom Hex Color</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="minecraft-nav-menu" id="minecraftNavMenu">
+                        <a href="#" class="minecraft-nav-item active" onclick="showMinecraftTool('hex')">Custom Hex Color</a>
+                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('colors')">Minecraft Color Code & Preview</a>
+                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('gradient')">Gradient Generator</a>
                     </div>
                 </div>
             </div>
-
-            <div class="input-section">
-                <!-- Gradient Text Generator (moved to bottom) -->
-                <div class="gradient-section">
-                    <h3 style="margin-bottom: 15px; color: #8B4513;">🌈 Gradient Text Generator</h3>
-                    <div class="gradient-controls">
-                        <div class="gradient-input-group">
-                            <label for="gradientText">Text for gradient:</label>
-                            <input type="text" id="gradientText" class="gradient-text-input" placeholder="Enter text for gradient effect" maxlength="50">
+            
+            <!-- Custom Hex Color Tool -->
+            <div id="minecraft-hex" class="minecraft-tool active">
+                <div class="input-section">
+                    <!-- Custom Hex Color -->
+                    <div class="hex-color-section">
+                        <h3 style="margin-bottom: 15px; color: #333;">Hex Color Picker</h3>
+                        <div class="hex-input-group">
+                            <input type="text" id="hexInput" class="hex-input" placeholder="#FF5555 or FF5555" maxlength="7">
+                            <input type="color" id="colorPicker" class="color-picker" value="#FF5555">
+                            <button class="hex-apply-btn" onclick="applyHexColor()">Apply Color</button>
                         </div>
-                        <div class="gradient-color-group">
-                            <div class="gradient-color-picker">
-                                <label>Start Color:</label>
-                                <input type="color" id="gradientStartColor" class="color-picker" value="#FF5555">
-                            </div>
-                            <div class="gradient-color-picker">
-                                <label>End Color:</label>
-                                <input type="color" id="gradientEndColor" class="color-picker" value="#5555FF">
-                            </div>
-                            <button class="hex-apply-btn" onclick="generateGradient()">Generate Gradient</button>
+                        <div class="hex-preview" id="hexPreview">Custom colored text will appear here...</div>
+                    </div>
+
+                    <label for="hexMinecraftText">Enter your Minecraft text:</label>
+                    <textarea id="hexMinecraftText" class="minecraft-input" placeholder="Type your text here or use the color picker above... Example: Custom #FF5555 colored text"></textarea>
+                    <button class="clear-btn" onclick="clearHexMinecraft()">Clear Text</button>
+                </div>
+
+                <div class="output-section full-width">
+                    <div class="output-box">
+                        <div class="output-title">
+                            Minecraft Text Preview <span class="badge">Live Preview</span>
+                        </div>
+                        <div class="minecraft-preview" id="hexMinecraftPreview">
+                            Start typing to see your colorful Minecraft text here...
+                        </div>
+                        <div class="description">
+                            Preview how your text will look in Minecraft with custom hex colors.
                         </div>
                     </div>
-                    <div class="gradient-preview" id="gradientPreview">Gradient preview will appear here...</div>
-                    <div class="gradient-code" id="gradientCode"></div>
+
+                    <div class="output-box">
+                        <div class="output-title">
+                            Copy-Ready Code <span class="badge">Game Ready</span>
+                            <select id="hexCodeFormat" class="format-selector" onchange="updateHexOutput()">
+                                <option value="&">&amp; Format</option>
+                                <option value="§">§ Format</option>
+                            </select>
+                        </div>
+                        <div class="output-text" id="hexMinecraftCode">
+                            <button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>
+                            <span class="example-text">Minecraft hex color codes will appear here...</span>
+                        </div>
+                        <div class="description">
+                            Raw Minecraft hex color codes ready to paste into your server, plugin, or game.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Minecraft Color Code & Preview Tool -->
+            <div id="minecraft-colors" class="minecraft-tool">
+                <div class="input-section">
+                    <!-- Formatting Presets -->
+                    <div class="presets-section">
+                        <h3 style="margin-bottom: 15px; color: #8B4513;">⚡ Quick Presets</h3>
+                        <div class="presets-grid">
+                            <button class="preset-btn" onclick="applyPreset('welcome')" title="Server Welcome Message">
+                                <span class="preset-name">Server Welcome</span>
+                                <span class="preset-preview">§eWelcome to §bOur Server§e!</span>
+                            </button>
+                            <button class="preset-btn" onclick="applyPreset('error')" title="Error Message">
+                                <span class="preset-name">Error Message</span>
+                                <span class="preset-preview">§c§l[ERROR]§r §cSomething went wrong!</span>
+                            </button>
+                            <button class="preset-btn" onclick="applyPreset('success')" title="Success Message">
+                                <span class="preset-name">Success</span>
+                                <span class="preset-preview">§a§l[SUCCESS]§r §aAction completed!</span>
+                            </button>
+                            <button class="preset-btn" onclick="applyPreset('rainbow')" title="Rainbow Text">
+                                <span class="preset-name">Rainbow</span>
+                                <span class="preset-preview">§cR§6a§ei§an§bb§9o§dw</span>
+                            </button>
+                            <button class="preset-btn" onclick="applyPreset('warning')" title="Warning Message">
+                                <span class="preset-name">Warning</span>
+                                <span class="preset-preview">§6§l[WARNING]§r §6Be careful!</span>
+                            </button>
+                            <button class="preset-btn" onclick="applyPreset('info')" title="Information Message">
+                                <span class="preset-name">Info</span>
+                                <span class="preset-preview">§b§l[INFO]§r §bHere's some info</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-palette">
+                        <div class="color-item" onclick="insertCode('§0')" title="Black">
+                            <div class="color-preview" style="background-color: #000000;"></div>
+                            <span>§0 Black</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§1')" title="Dark Blue">
+                            <div class="color-preview" style="background-color: #0000AA;"></div>
+                            <span>§1 Dark Blue</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§2')" title="Dark Green">
+                            <div class="color-preview" style="background-color: #00AA00;"></div>
+                            <span>§2 Dark Green</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§3')" title="Dark Aqua">
+                            <div class="color-preview" style="background-color: #00AAAA;"></div>
+                            <span>§3 Dark Aqua</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§4')" title="Dark Red">
+                            <div class="color-preview" style="background-color: #AA0000;"></div>
+                            <span>§4 Dark Red</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§5')" title="Dark Purple">
+                            <div class="color-preview" style="background-color: #AA00AA;"></div>
+                            <span>§5 Dark Purple</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§6')" title="Gold">
+                            <div class="color-preview" style="background-color: #FFAA00;"></div>
+                            <span>§6 Gold</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§7')" title="Gray">
+                            <div class="color-preview" style="background-color: #AAAAAA;"></div>
+                            <span>§7 Gray</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§8')" title="Dark Gray">
+                            <div class="color-preview" style="background-color: #555555;"></div>
+                            <span>§8 Dark Gray</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§9')" title="Blue">
+                            <div class="color-preview" style="background-color: #5555FF;"></div>
+                            <span>§9 Blue</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§a')" title="Green">
+                            <div class="color-preview" style="background-color: #55FF55;"></div>
+                            <span>§a Green</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§b')" title="Aqua">
+                            <div class="color-preview" style="background-color: #55FFFF;"></div>
+                            <span>§b Aqua</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§c')" title="Red">
+                            <div class="color-preview" style="background-color: #FF5555;"></div>
+                            <span>§c Red</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§d')" title="Light Purple">
+                            <div class="color-preview" style="background-color: #FF55FF;"></div>
+                            <span>§d Light Purple</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§e')" title="Yellow">
+                            <div class="color-preview" style="background-color: #FFFF55;"></div>
+                            <span>§e Yellow</span>
+                        </div>
+                        <div class="color-item" onclick="insertCode('§f')" title="White">
+                            <div class="color-preview" style="background-color: #FFFFFF;"></div>
+                            <span>§f White</span>
+                        </div>
+                    </div>
+
+                    <div class="format-buttons">
+                        <button class="format-btn" onclick="insertCode('§l')" title="Bold">§l Bold</button>
+                        <button class="format-btn" onclick="insertCode('§o')" title="Italic">§o Italic</button>
+                        <button class="format-btn" onclick="insertCode('§n')" title="Underline">§n Underline</button>
+                        <button class="format-btn" onclick="insertCode('§m')" title="Strikethrough">§m Strike</button>
+                        <button class="format-btn" onclick="insertCode('§k')" title="Obfuscated">§k Magic</button>
+                        <button class="format-btn" onclick="insertCode('§r')" title="Reset">§r Reset</button>
+                    </div>
+
+                    <label for="minecraftText">Enter your Minecraft text:</label>
+                    <textarea id="minecraftText" class="minecraft-input" placeholder="Type your text here or click colors above... Example: §eHello §bWorld§r!"></textarea>
+                    <button class="clear-btn" onclick="clearMinecraft()">Clear Text</button>
+                </div>
+
+                <div class="output-section full-width">
+                    <div class="output-box">
+                        <div class="output-title">
+                            Minecraft Text Preview <span class="badge">Live Preview</span>
+                        </div>
+                        <div class="minecraft-preview" id="minecraftPreview">
+                            Start typing to see your colorful Minecraft text here...
+                        </div>
+                        <div class="description">
+                            Preview how your text will look in Minecraft. Copy the code above to use in-game!
+                        </div>
+                    </div>
+
+                    <div class="output-box">
+                        <div class="output-title">
+                            Copy-Ready Code <span class="badge">Game Ready</span>
+                            <select id="minecraftCodeFormat" class="format-selector" onchange="updateMinecraftOutput()">
+                                <option value="&">&amp; Format</option>
+                                <option value="§">§ Format</option>
+                            </select>
+                        </div>
+                        <div class="output-text" id="minecraftCode">
+                            <button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>
+                            <span class="example-text">Minecraft color codes will appear here...</span>
+                        </div>
+                        <div class="description">
+                            Raw Minecraft color codes ready to paste into your server, plugin, or game. Supports both § and & formats.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gradient Generator Tool -->
+            <div id="minecraft-gradient" class="minecraft-tool">
+                <div class="input-section">
+                    <label for="gradientText">Text for gradient:</label>
+                    
+                    <!-- Gradient Text Generator -->
+                    <div class="gradient-section">
+                        <h3 style="margin-bottom: 15px; color: #8B4513;">🌈 Gradient Text Generator</h3>
+                        <div class="gradient-controls">
+                            <div class="gradient-input-group">
+                                <input type="text" id="gradientText" class="gradient-text-input" placeholder="Enter text for gradient effect" maxlength="50">
+                            </div>
+                            <div class="gradient-color-group">
+                                <div class="gradient-color-picker">
+                                    <label>Start Color:</label>
+                                    <input type="color" id="gradientStartColor" class="color-picker" value="#FF5555">
+                                </div>
+                                <div class="gradient-color-picker">
+                                    <label>End Color:</label>
+                                    <input type="color" id="gradientEndColor" class="color-picker" value="#5555FF">
+                                </div>
+                                <button class="hex-apply-btn" onclick="generateGradient()">Generate Gradient</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="clear-btn" onclick="clearGradient()">Clear Text</button>
+                </div>
+
+                <div class="output-section full-width">
+                    <div class="output-box">
+                        <div class="output-title">
+                            Gradient Preview <span class="badge">Live Preview</span>
+                        </div>
+                        <div class="gradient-preview" id="gradientPreview">Gradient preview will appear here...</div>
+                        <div class="description">
+                            Preview your gradient text effect. Each character transitions smoothly between colors.
+                        </div>
+                    </div>
+
+                    <div class="output-box">
+                        <div class="output-title">
+                            Copy-Ready Code <span class="badge">Game Ready</span>
+                            <select id="gradientCodeFormat" class="format-selector" onchange="updateGradientOutput()">
+                                <option value="&">&amp; Format</option>
+                                <option value="§">§ Format</option>
+                            </select>
+                        </div>
+                        <div class="output-text" id="gradientCode">
+                            <button class="copy-btn" onclick="copyText('gradientCode')">Copy</button>
+                            <span class="example-text">Gradient color codes will appear here...</span>
+                        </div>
+                        <div class="description">
+                            Raw Minecraft gradient codes ready to paste into your server, plugin, or game.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
