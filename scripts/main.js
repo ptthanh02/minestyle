@@ -174,9 +174,14 @@ function generateGradient() {
     }
     
     gradientPreview.innerHTML = previewHtml;
+    
+    // Get format preference and convert the output
+    const formatSelect = document.getElementById('gradientCodeFormat');
+    const selectedFormat = formatSelect ? formatSelect.value : '&';
+    const formattedGradientCode = convertColorFormat(gradientCode, selectedFormat);
+    
     document.getElementById('gradientCode').innerHTML = 
-        `<strong>Gradient Code:</strong><br>${gradientCode}<br><br>` +
-        `<button class="copy-btn" style="position: static; opacity: 1; margin-top: 8px;" onclick="copyGradientCode()">Copy Gradient Code</button>`;
+        `<button class="copy-btn" onclick="copyText('gradientCode')">Copy</button>${formattedGradientCode}`;
 }
 
 function copyGradientCode() {
@@ -426,8 +431,13 @@ function updateMinecraftPreview() {
     const parsedHtml = parseMinecraftText(text);
     minecraftPreview.innerHTML = parsedHtml;
     
+    // Get format preference and convert the output
+    const formatSelect = document.getElementById('minecraftCodeFormat');
+    const selectedFormat = formatSelect ? formatSelect.value : '&';
+    const formattedText = convertColorFormat(text, selectedFormat);
+    
     // Update code output
-    minecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>${text}`;
+    minecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>${formattedText}`;
 }
 
 function updateHexPreview() {
@@ -461,8 +471,13 @@ function updateHexMinecraftPreview() {
     const parsedHtml = parseMinecraftText(text);
     if (hexMinecraftPreview) hexMinecraftPreview.innerHTML = parsedHtml;
     
+    // Get format preference and convert the output
+    const formatSelect = document.getElementById('hexCodeFormat');
+    const selectedFormat = formatSelect ? formatSelect.value : '&';
+    const formattedText = convertColorFormat(text, selectedFormat);
+    
     // Update code output
-    if (hexMinecraftCode) hexMinecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>${text}`;
+    if (hexMinecraftCode) hexMinecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>${formattedText}`;
 }
 
 /**
@@ -663,4 +678,30 @@ function clearGradient() {
     if (gradientTextInput) gradientTextInput.value = '';
     if (gradientPreviewEl) gradientPreviewEl.textContent = 'Gradient preview will appear here...';
     if (gradientCodeEl) gradientCodeEl.innerHTML = '<button class="copy-btn" onclick="copyText(\'gradientCode\')">Copy</button><span class="example-text">Gradient color codes will appear here...</span>';
+}
+
+// Format switching functions
+function convertColorFormat(text, targetFormat) {
+    if (targetFormat === '&') {
+        // Convert § to &
+        return text.replace(/§/g, '&');
+    } else {
+        // Convert & to §
+        return text.replace(/&/g, '§');
+    }
+}
+
+function updateHexOutput() {
+    updateHexMinecraftPreview();
+}
+
+function updateMinecraftOutput() {
+    updateMinecraftPreview();
+}
+
+function updateGradientOutput() {
+    const text = gradientText ? gradientText.value : '';
+    if (text.trim() !== '') {
+        generateGradient();
+    }
 }

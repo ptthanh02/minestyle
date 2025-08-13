@@ -218,6 +218,29 @@ textarea:focus {
     display: flex;
     align-items: center;
     gap: 8px;
+    justify-content: space-between;
+}
+
+.format-selector {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.85em;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.format-selector:hover {
+    border-color: #667eea;
+    background: #fff;
+}
+
+.format-selector:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
 }
 
 .badge {
@@ -240,6 +263,11 @@ textarea:focus {
     cursor: text;
     position: relative;
     transition: all 0.3s ease;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
 }
 
 .output-text:hover {

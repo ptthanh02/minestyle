@@ -1,1 +1,0 @@
-Please remove the Minecraft theme overhaul from the requirements but keep all other enhancements.
