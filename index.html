@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineStyle - Professional Text Converter</title>
+    <meta name="description" content="MineStyle - Professional text converter for small caps and Minecraft colors. Create beautiful formatted text with live preview and easy copy features.">
+    <meta name="keywords" content="minecraft colors, small caps, text converter, unicode, hex colors, gradient text">
+    <meta name="author" content="MineStyle">
+    <title>MineStyle - Professional Text Converter & Minecraft Colors</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Meta Tags for Social Sharing -->
+    <meta property="og:title" content="MineStyle - Professional Text Converter">
+    <meta property="og:description" content="Create beautiful small caps text and colorful Minecraft text with live preview. Modern, fast, and mobile-friendly.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -12,9 +31,9 @@
         <div class="nav-container">
             <a href="#" class="logo">MineStyle</a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#" class="nav-link active" onclick="showSection('smallcaps')">Small Caps</a></li>
-                <li><a href="#" class="nav-link" onclick="showSection('minecraft')">Minecraft Colors</a></li>
-                <li><a href="#" class="nav-link" onclick="showSection('about')">About</a></li>
+                <li><a href="#" class="nav-link active" onclick="showSection('smallcaps', this); return false;">Small Caps</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('minecraft', this); return false;">Minecraft Colors</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('about', this); return false;">About</a></li>
             </ul>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </div>
@@ -69,14 +88,14 @@
             <!-- Sub-navigation for Minecraft Tools -->
             <div class="minecraft-nav">
                 <div class="minecraft-nav-dropdown">
-                    <button class="minecraft-nav-button" onclick="toggleMinecraftDropdown()">
+                    <button class="minecraft-nav-button" onclick="toggleMinecraftDropdown(event)">
                         <span id="currentMinecraftTool">Custom Hex Color</span>
                         <span class="dropdown-arrow">▼</span>
                     </button>
                     <div class="minecraft-nav-menu" id="minecraftNavMenu">
-                        <a href="#" class="minecraft-nav-item active" onclick="showMinecraftTool('hex')">Custom Hex Color</a>
-                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('colors')">Minecraft color code</a>
-                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('gradient')">Gradient Generator</a>
+                        <a href="#" class="minecraft-nav-item active" onclick="showMinecraftTool('hex', event); return false;">Custom Hex Color</a>
+                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('colors', event); return false;">Minecraft color code</a>
+                        <a href="#" class="minecraft-nav-item" onclick="showMinecraftTool('gradient', event); return false;">Gradient Generator</a>
                     </div>
                 </div>
             </div>
@@ -140,28 +159,28 @@
                         <h3 style="margin-bottom: 15px; color: #8B4513;">⚡ Quick Presets</h3>
                         <div class="presets-grid">
                             <button class="preset-btn" onclick="applyPreset('welcome')" title="Server Welcome Message">
-                                <span class="preset-name">Server Welcome</span>
-                                <span class="preset-preview">§eWelcome to §bOur Server§e!</span>
+                                <span class="preset-name">🎉 Server Welcome</span>
+                                <span class="preset-preview">§e✨ §bWelcome to §a§lOur Server§r§e! §6Enjoy your stay! §e✨</span>
                             </button>
                             <button class="preset-btn" onclick="applyPreset('error')" title="Error Message">
-                                <span class="preset-name">Error Message</span>
-                                <span class="preset-preview">§c§l[ERROR]§r §cSomething went wrong!</span>
+                                <span class="preset-name">❌ Error Alert</span>
+                                <span class="preset-preview">§c§l❌ [ERROR]§r §cSomething went wrong! Please try again.</span>
                             </button>
                             <button class="preset-btn" onclick="applyPreset('success')" title="Success Message">
-                                <span class="preset-name">Success</span>
-                                <span class="preset-preview">§a§l[SUCCESS]§r §aAction completed!</span>
+                                <span class="preset-name">✅ Success Notice</span>
+                                <span class="preset-preview">§a§l✅ [SUCCESS]§r §aAction completed successfully!</span>
                             </button>
                             <button class="preset-btn" onclick="applyPreset('rainbow')" title="Rainbow Text">
-                                <span class="preset-name">Rainbow</span>
-                                <span class="preset-preview">§cR§6a§ei§an§bb§9o§dw</span>
+                                <span class="preset-name">🌈 Rainbow Style</span>
+                                <span class="preset-preview">§cR§6a§ei§an§bb§9o§dw §cT§6e§ex§at</span>
                             </button>
                             <button class="preset-btn" onclick="applyPreset('warning')" title="Warning Message">
-                                <span class="preset-name">Warning</span>
-                                <span class="preset-preview">§6§l[WARNING]§r §6Be careful!</span>
+                                <span class="preset-name">⚠️ Warning Alert</span>
+                                <span class="preset-preview">§6§l⚠️ [WARNING]§r §6Please be careful with this action.</span>
                             </button>
                             <button class="preset-btn" onclick="applyPreset('info')" title="Information Message">
-                                <span class="preset-name">Info</span>
-                                <span class="preset-preview">§b§l[INFO]§r §bHere's some info</span>
+                                <span class="preset-name">ℹ️ Info Notice</span>
+                                <span class="preset-preview">§b§lℹ️ [INFO]§r §bHere is some important information.</span>
                             </button>
                         </div>
                     </div>
