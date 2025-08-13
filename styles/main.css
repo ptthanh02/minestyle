@@ -1117,6 +1117,8 @@ textarea::placeholder {
     margin: var(--spacing-xl) 0;
     padding: var(--spacing-md) 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 5000;
 }
 
 .minecraft-nav-dropdown {
@@ -1124,6 +1126,7 @@ textarea::placeholder {
     display: inline-block;
     width: 100%;
     max-width: 400px;
+    z-index: 5001;
 }
 
 .minecraft-nav-button {
@@ -1143,7 +1146,7 @@ textarea::placeholder {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
     letter-spacing: 0.01em;
     position: relative;
-    z-index: 10;
+    z-index: 5000;
 }
 
 .minecraft-nav-button:hover {
@@ -1183,7 +1186,7 @@ textarea::placeholder {
     visibility: hidden;
     transform: translateY(-10px) scale(0.98);
     transition: var(--transition-base);
-    z-index: 1001;
+    z-index: 5000;
     min-width: 100%;
     pointer-events: none;
 }
@@ -1193,6 +1196,23 @@ textarea::placeholder {
     visibility: visible;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    z-index: 5001;
+}
+
+/* Ensure menu items are always clickable when menu is open */
+.minecraft-nav-menu.open .minecraft-nav-item {
+    pointer-events: auto !important;
+    z-index: 5002 !important;
+    position: relative;
+}
+
+/* Reset z-index of interfering elements when dropdown is open */
+.minecraft-nav-dropdown.open ~ .minecraft-tool {
+    z-index: 1;
+}
+
+.minecraft-nav-dropdown.open ~ .minecraft-tool .hex-color-section {
+    z-index: 1;
 }
 
 .minecraft-nav-item {
@@ -1207,6 +1227,8 @@ textarea::placeholder {
     position: relative;
     cursor: pointer;
     white-space: nowrap;
+    z-index: 5001;
+    background: transparent;
 }
 
 .minecraft-nav-item::before {
@@ -1252,12 +1274,12 @@ textarea::placeholder {
 
 /* Minecraft Tools */
 .minecraft-tool {
-    display: none;
+    display: none !important;
     animation: fadeInUp 0.5s ease-out;
 }
 
 .minecraft-tool.active {
-    display: block;
+    display: block !important;
 }
 
 /* Enhanced Mobile Responsive */
@@ -1428,6 +1450,18 @@ input:focus,
 textarea:focus,
 select:focus {
     outline: 2px solid rgba(102, 126, 234, 0.6);
+    outline-offset: 2px;
+}
+
+/* Additional focus styles for dropdown items */
+.minecraft-nav-item:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.8);
+    outline-offset: -2px;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.minecraft-nav-button:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.8);
     outline-offset: 2px;
 }
 

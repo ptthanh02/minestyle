@@ -118,43 +118,35 @@ const hapticFeedback = {
  * Enhanced navigation functions with smooth animations
  */
 function showSection(sectionName, clickedElement = null) {
-    // Hide all sections with fade out
+    // Hide all sections first
     const sections = document.querySelectorAll('.page-section');
-    const currentActive = document.querySelector('.page-section.active');
-    
-    if (currentActive) {
-        currentActive.style.opacity = '0';
-        currentActive.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            currentActive.classList.remove('active');
-            currentActive.style.opacity = '';
-            currentActive.style.transform = '';
-        }, 200);
-    }
+    sections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none';
+    });
 
     // Remove active class from all nav links
     const allNavLinks = document.querySelectorAll('.nav-link');
     allNavLinks.forEach(link => link.classList.remove('active'));
 
-    // Show selected section with animation delay
-    setTimeout(() => {
-        const newSection = getElement(sectionName);
-        if (newSection) {
-            newSection.classList.add('active');
-            animations.fadeIn(newSection, 400);
-        }
-        
-        // Mark nav link as active - use the clicked element or find by onclick attribute
-        let activeLink = clickedElement;
-        if (!activeLink) {
-            activeLink = document.querySelector(`[onclick*="showSection('${sectionName}')"]`);
-        }
-        
-        if (activeLink) {
-            activeLink.classList.add('active');
-            animations.pulse(activeLink);
-        }
-    }, 200);
+    // Show selected section with animation
+    const newSection = getElement(sectionName);
+    if (newSection) {
+        newSection.style.display = 'block';
+        newSection.classList.add('active');
+        animations.fadeIn(newSection, 400);
+    }
+    
+    // Mark nav link as active - use the clicked element or find by onclick attribute
+    let activeLink = clickedElement;
+    if (!activeLink) {
+        activeLink = document.querySelector(`[onclick*="showSection('${sectionName}')"]`);
+    }
+    
+    if (activeLink) {
+        activeLink.classList.add('active');
+        animations.pulse(activeLink);
+    }
 
     // Close mobile menu if open
     const mobileNavLinks = getElement('navLinks');
@@ -898,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const minecraftMenu = getElement('minecraftNavMenu');
             if (minecraftMenu && minecraftMenu.classList.contains('open')) {
-                toggleMinecraftDropdown();
+                closeMinecraftDropdown();
             }
         }
     });
@@ -921,7 +913,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
-        // Close mobile menu
+        // Handle mobile menu closing
         const navbar = document.querySelector('.navbar');
         const mobileMenu = getElement('navLinks');
         
@@ -929,27 +921,24 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileMenu.classList.remove('active');
         }
         
-        // Close minecraft dropdown
+        // Handle minecraft dropdown closing
         const minecraftDropdown = document.querySelector('.minecraft-nav-dropdown');
-        const minecraftMenu = getElement('minecraftNavMenu');
-        const minecraftButton = document.querySelector('.minecraft-nav-button');
         
-        if (minecraftDropdown && minecraftMenu && !minecraftDropdown.contains(e.target)) {
-            if (minecraftMenu.classList.contains('open')) {
-                minecraftMenu.classList.remove('open');
-                if (minecraftButton) {
-                    minecraftButton.classList.remove('active');
-                }
-            }
+        // Only close if clicking outside the entire dropdown container
+        if (minecraftDropdown && !minecraftDropdown.contains(e.target)) {
+            closeMinecraftDropdown();
         }
     });
 
-    // Prevent dropdown from closing when clicking inside
+    // Prevent dropdown from closing when clicking inside menu items
     const minecraftMenu = getElement('minecraftNavMenu');
     if (minecraftMenu) {
         minecraftMenu.addEventListener('click', function(e) {
-            // Allow nav items to work but prevent menu closing on other clicks
-            if (!e.target.classList.contains('minecraft-nav-item')) {
+            // Only allow nav items to work, prevent other clicks from propagating
+            if (e.target.classList.contains('minecraft-nav-item')) {
+                // Let the item click be handled by the main event delegation
+                return;
+            } else {
                 e.stopPropagation();
             }
         });
@@ -960,6 +949,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle navigation links
         if (e.target.classList.contains('nav-link')) {
             e.preventDefault();
+            e.stopPropagation();
             const onclick = e.target.getAttribute('onclick');
             if (onclick) {
                 // Extract section name from onclick attribute
@@ -973,6 +963,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle minecraft nav items
         if (e.target.classList.contains('minecraft-nav-item')) {
             e.preventDefault();
+            e.stopPropagation();
             const onclick = e.target.getAttribute('onclick');
             if (onclick) {
                 // Extract tool name from onclick attribute
@@ -981,6 +972,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     showMinecraftTool(match[1], e);
                 }
             }
+        }
+        
+        // Handle minecraft dropdown button clicks
+        if (e.target.classList.contains('minecraft-nav-button') || e.target.closest('.minecraft-nav-button')) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMinecraftDropdown(e);
         }
     });
 
@@ -1029,28 +1027,72 @@ function toggleMinecraftDropdown(event) {
     
     const menu = getElement('minecraftNavMenu');
     const button = document.querySelector('.minecraft-nav-button');
+    const dropdown = document.querySelector('.minecraft-nav-dropdown');
     
-    if (menu && button) {
+    if (menu && button && dropdown) {
         const isOpen = menu.classList.contains('open');
         
-        // Close all other dropdowns first
-        document.querySelectorAll('.minecraft-nav-menu.open').forEach(otherMenu => {
-            if (otherMenu !== menu) {
-                otherMenu.classList.remove('open');
-            }
-        });
-        
-        // Toggle current dropdown
         if (isOpen) {
-            menu.classList.remove('open');
-            button.classList.remove('active');
+            // Close dropdown
+            closeMinecraftDropdown();
         } else {
-            menu.classList.add('open');
-            button.classList.add('active');
+            // Open dropdown
+            openMinecraftDropdown();
         }
         
         // Add haptic feedback
         hapticFeedback.light();
+    }
+}
+
+// Helper function to open dropdown
+function openMinecraftDropdown() {
+    const menu = getElement('minecraftNavMenu');
+    const button = document.querySelector('.minecraft-nav-button');
+    const dropdown = document.querySelector('.minecraft-nav-dropdown');
+    
+    if (menu && button && dropdown) {
+        // Close any other open dropdowns first
+        closeMinecraftDropdown();
+        
+        // Open this dropdown
+        menu.classList.add('open');
+        button.classList.add('active');
+        dropdown.classList.add('open');
+        
+        // Reset all pointer events and z-index
+        menu.style.pointerEvents = 'auto';
+        menu.style.zIndex = '10000';
+        
+        // Ensure all menu items are clickable
+        const dropdownItems = menu.querySelectorAll('.minecraft-nav-item');
+        dropdownItems.forEach(item => {
+            item.style.pointerEvents = 'auto';
+            item.style.zIndex = '10001';
+        });
+    }
+}
+
+// Helper function to close dropdown
+function closeMinecraftDropdown() {
+    const menu = getElement('minecraftNavMenu');
+    const button = document.querySelector('.minecraft-nav-button');
+    const dropdown = document.querySelector('.minecraft-nav-dropdown');
+    
+    if (menu && button && dropdown) {
+        menu.classList.remove('open');
+        button.classList.remove('active');
+        dropdown.classList.remove('open');
+        
+        // Reset pointer events
+        menu.style.pointerEvents = 'none';
+        
+        // Reset menu items
+        const dropdownItems = menu.querySelectorAll('.minecraft-nav-item');
+        dropdownItems.forEach(item => {
+            item.style.pointerEvents = '';
+            item.style.zIndex = '';
+        });
     }
 }
 
@@ -1061,9 +1103,10 @@ function showMinecraftTool(toolName, event) {
         event.stopPropagation();
     }
     
-    // Hide all minecraft tools
+    // Hide all minecraft tools with explicit style setting
     document.querySelectorAll('.minecraft-tool').forEach(tool => {
         tool.classList.remove('active');
+        tool.style.display = 'none'; // Explicitly hide to prevent CSS conflicts
     });
     
     // Remove active class from all nav items
@@ -1075,6 +1118,7 @@ function showMinecraftTool(toolName, event) {
     const selectedTool = getElement(`minecraft-${toolName}`);
     if (selectedTool) {
         selectedTool.classList.add('active');
+        selectedTool.style.display = 'block'; // Explicitly show
         // Add smooth animation
         animations.fadeIn(selectedTool, 300);
     }
@@ -1092,13 +1136,8 @@ function showMinecraftTool(toolName, event) {
         currentToolSpan.textContent = selectedNavItem.textContent.trim();
     }
     
-    // Close dropdown
-    const menu = getElement('minecraftNavMenu');
-    const button = document.querySelector('.minecraft-nav-button');
-    if (menu && button) {
-        menu.classList.remove('open');
-        button.classList.remove('active');
-    }
+    // Close dropdown using helper function
+    closeMinecraftDropdown();
     
     // Add haptic feedback
     hapticFeedback.light();
