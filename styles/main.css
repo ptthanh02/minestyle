@@ -1118,7 +1118,7 @@ textarea::placeholder {
     padding: var(--spacing-md) 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
-    z-index: 10000;
+    z-index: 5000;
 }
 
 .minecraft-nav-dropdown {
@@ -1126,7 +1126,7 @@ textarea::placeholder {
     display: inline-block;
     width: 100%;
     max-width: 400px;
-    z-index: 10001;
+    z-index: 5001;
 }
 
 .minecraft-nav-button {
@@ -1146,7 +1146,7 @@ textarea::placeholder {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
     letter-spacing: 0.01em;
     position: relative;
-    z-index: 10000;
+    z-index: 5000;
 }
 
 .minecraft-nav-button:hover {
@@ -1186,7 +1186,7 @@ textarea::placeholder {
     visibility: hidden;
     transform: translateY(-10px) scale(0.98);
     transition: var(--transition-base);
-    z-index: 10000;
+    z-index: 5000;
     min-width: 100%;
     pointer-events: none;
 }
@@ -1196,15 +1196,17 @@ textarea::placeholder {
     visibility: visible;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    z-index: 5001;
 }
 
 /* Ensure menu items are always clickable when menu is open */
 .minecraft-nav-menu.open .minecraft-nav-item {
     pointer-events: auto !important;
-    z-index: 10002 !important;
+    z-index: 5002 !important;
+    position: relative;
 }
 
-/* Reduce z-index of interfering elements when dropdown is open */
+/* Reset z-index of interfering elements when dropdown is open */
 .minecraft-nav-dropdown.open ~ .minecraft-tool {
     z-index: 1;
 }
@@ -1225,7 +1227,8 @@ textarea::placeholder {
     position: relative;
     cursor: pointer;
     white-space: nowrap;
-    z-index: 10001;
+    z-index: 5001;
+    background: transparent;
 }
 
 .minecraft-nav-item::before {
@@ -1271,12 +1274,12 @@ textarea::placeholder {
 
 /* Minecraft Tools */
 .minecraft-tool {
-    display: none;
+    display: none !important;
     animation: fadeInUp 0.5s ease-out;
 }
 
 .minecraft-tool.active {
-    display: block;
+    display: block !important;
 }
 
 /* Enhanced Mobile Responsive */
