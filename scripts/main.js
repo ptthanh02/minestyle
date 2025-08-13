@@ -46,34 +46,6 @@ const presetTemplates = {
     rainbow: '§cR§6a§ei§an§bb§9o§dw §cT§6e§ex§at'
 };
 
-// Language system
-let currentLanguage = 'en';
-
-const translations = {
-    en: {
-        'nav-smallcaps': 'Small Caps',
-        'nav-minecraft': 'Minecraft Colors',
-        'nav-about': 'About',
-        'section-smallcaps-title': 'Small Caps Converter',
-        'section-smallcaps-subtitle': 'Transform your text into elegant small caps format',
-        'section-minecraft-title': 'Minecraft Text Colors',
-        'section-minecraft-subtitle': 'Create colorful Minecraft text with custom hex colors!',
-        'section-about-title': 'About MineStyle',
-        'section-about-subtitle': 'Professional text formatting tools for creators and gamers'
-    },
-    vi: {
-        'nav-smallcaps': 'Chữ Nhỏ',
-        'nav-minecraft': 'Màu Minecraft',
-        'nav-about': 'Giới Thiệu',
-        'section-smallcaps-title': 'Bộ Chuyển Đổi Chữ Nhỏ',
-        'section-smallcaps-subtitle': 'Chuyển đổi văn bản của bạn thành định dạng chữ nhỏ thanh lịch',
-        'section-minecraft-title': 'Màu Văn Bản Minecraft',
-        'section-minecraft-subtitle': 'Tạo văn bản Minecraft đầy màu sắc với màu hex tùy chỉnh!',
-        'section-about-title': 'Giới Thiệu MineStyle',
-        'section-about-subtitle': 'Công cụ định dạng văn bản chuyên nghiệp cho người sáng tạo và game thủ'
-    }
-};
-
 /**
  * Navigation functions
  */
@@ -502,56 +474,6 @@ function clearMinecraft() {
 }
 
 /**
- * Language Functions
- */
-function toggleLanguage() {
-    currentLanguage = currentLanguage === 'en' ? 'vi' : 'en';
-    updateLanguageDisplay();
-    updatePageTexts();
-}
-
-function updateLanguageDisplay() {
-    const languageText = document.getElementById('languageText');
-    const languageFlag = document.getElementById('languageFlag');
-    
-    if (currentLanguage === 'en') {
-        languageText.textContent = 'EN';
-        // US flag (red, white, blue stripes)
-        languageFlag.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMDAyNjY4Ii8+CjxyZWN0IHk9IjgiIHdpZHRoPSIyNCIgaGVpZ2h0PSI4IiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB5PSIxNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjgiIGZpbGw9IiNDRTExMjYiLz4KPC9zdmc+";
-    } else {
-        languageText.textContent = 'VI';
-        // Vietnam flag (red background with yellow star)
-        languageFlag.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGEyNTFkIi8+Cjxwb2x5Z29uIHBvaW50cz0iMTIsMy4zOSAxNC43NywxMC43NyAyMi42MywxMC43NyAxNi40MywxNS4yMyAyNiwyMi42MSAxMiw3LjA4IDUuMTUsMTUuMjMiIGZpbGw9IiNmZmQzMDAiLz4KPC9zdmc+";
-    }
-}
-
-function updatePageTexts() {
-    const elementsToTranslate = document.querySelectorAll('[data-key]');
-    
-    elementsToTranslate.forEach(element => {
-        const key = element.getAttribute('data-key');
-        if (translations[currentLanguage] && translations[currentLanguage][key]) {
-            element.textContent = translations[currentLanguage][key];
-        }
-    });
-    
-    // Update section titles and subtitles manually since they don't have data-key
-    const smallcapsTitle = document.querySelector('#smallcaps .section-title');
-    const smallcapsSubtitle = document.querySelector('#smallcaps .section-subtitle');
-    const minecraftTitle = document.querySelector('#minecraft .section-title');
-    const minecraftSubtitle = document.querySelector('#minecraft .section-subtitle');
-    const aboutTitle = document.querySelector('#about .section-title');
-    const aboutSubtitle = document.querySelector('#about .section-subtitle');
-    
-    if (smallcapsTitle) smallcapsTitle.textContent = translations[currentLanguage]['section-smallcaps-title'];
-    if (smallcapsSubtitle) smallcapsSubtitle.textContent = translations[currentLanguage]['section-smallcaps-subtitle'];
-    if (minecraftTitle) minecraftTitle.textContent = translations[currentLanguage]['section-minecraft-title'];
-    if (minecraftSubtitle) minecraftSubtitle.textContent = translations[currentLanguage]['section-minecraft-subtitle'];
-    if (aboutTitle) aboutTitle.textContent = translations[currentLanguage]['section-about-title'];
-    if (aboutSubtitle) aboutSubtitle.textContent = translations[currentLanguage]['section-about-subtitle'];
-}
-
-/**
  * Initialize application
  */
 document.addEventListener('DOMContentLoaded', function() {
@@ -607,7 +529,4 @@ document.addEventListener('DOMContentLoaded', function() {
             navLinks.classList.remove('active');
         }
     });
-
-    // Initialize language display
-    updateLanguageDisplay();
 });
