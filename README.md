@@ -5,7 +5,7 @@ A modern text formatting tool for Minecraft server creators and content writers.
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-blue)](https://ptthanh02.github.io/MineStyle)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-![MineStyle Interface](https://github.com/user-attachments/assets/e7a496d2-6a8e-4190-b96f-e31192142dd1)
+![MineStyle Interface](https://github.com/user-attachments/assets/acef0562-7683-4fa2-83d1-aba894ee2995)
 
 ## 🌟 Features
 
