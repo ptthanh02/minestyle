@@ -29,6 +29,11 @@ const hexInput = document.getElementById('hexInput');
 const colorPicker = document.getElementById('colorPicker');
 const hexPreview = document.getElementById('hexPreview');
 
+// Hex tool specific elements
+const hexMinecraftText = document.getElementById('hexMinecraftText');
+const hexMinecraftPreview = document.getElementById('hexMinecraftPreview');
+const hexMinecraftCode = document.getElementById('hexMinecraftCode');
+
 // New gradient elements
 const gradientText = document.getElementById('gradientText');
 const gradientStartColor = document.getElementById('gradientStartColor');
@@ -233,6 +238,19 @@ function applyPreset(presetName) {
     const template = presetTemplates[presetName];
     if (!template) return;
     
+    // Determine which textarea to use based on the active minecraft tool
+    let textarea = minecraftText; // default
+    let updateFunction = updateMinecraftPreview; // default
+    
+    // Check if hex tool is active
+    const hexTool = document.getElementById('minecraft-hex');
+    if (hexTool && hexTool.classList.contains('active') && hexMinecraftText) {
+        textarea = hexMinecraftText;
+        updateFunction = updateHexMinecraftPreview;
+    }
+    
+    if (!textarea) return;
+    
     if (presetName === 'rainbow') {
         // Generate dynamic rainbow text
         const baseText = 'Rainbow Text';
@@ -249,20 +267,32 @@ function applyPreset(presetName) {
             }
         }
         
-        minecraftText.value = rainbowCode;
+        textarea.value = rainbowCode;
     } else {
-        minecraftText.value = template;
+        textarea.value = template;
     }
     
-    updateMinecraftPreview();
-    minecraftText.focus();
+    updateFunction();
+    textarea.focus();
 }
 
 /**
  * Minecraft color functions
  */
 function insertCode(code) {
-    const textarea = minecraftText;
+    // Determine which textarea to use based on the active minecraft tool
+    let textarea = minecraftText; // default
+    let updateFunction = updateMinecraftPreview; // default
+    
+    // Check if hex tool is active
+    const hexTool = document.getElementById('minecraft-hex');
+    if (hexTool && hexTool.classList.contains('active') && hexMinecraftText) {
+        textarea = hexMinecraftText;
+        updateFunction = updateHexMinecraftPreview;
+    }
+    
+    if (!textarea) return;
+    
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const text = textarea.value;
@@ -271,7 +301,7 @@ function insertCode(code) {
     textarea.focus();
     textarea.setSelectionRange(start + code.length, start + code.length);
     
-    updateMinecraftPreview();
+    updateFunction();
 }
 
 function applyHexColor() {
@@ -418,6 +448,23 @@ function updateHexPreview() {
     }
 }
 
+function updateHexMinecraftPreview() {
+    const text = hexMinecraftText ? hexMinecraftText.value : '';
+    
+    if (text.trim() === '') {
+        if (hexMinecraftPreview) hexMinecraftPreview.innerHTML = 'Start typing to see your colorful Minecraft text here...';
+        if (hexMinecraftCode) hexMinecraftCode.innerHTML = '<button class="copy-btn" onclick="copyText(\'hexMinecraftCode\')">Copy</button><span class="example-text">Minecraft hex color codes will appear here...</span>';
+        return;
+    }
+    
+    // Update preview
+    const parsedHtml = parseMinecraftText(text);
+    if (hexMinecraftPreview) hexMinecraftPreview.innerHTML = parsedHtml;
+    
+    // Update code output
+    if (hexMinecraftCode) hexMinecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>${text}`;
+}
+
 /**
  * Utility functions
  */
@@ -489,6 +536,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (minecraftText) minecraftText.addEventListener('input', updateMinecraftPreview);
     if (hexInput) hexInput.addEventListener('input', updateHexPreview);
     
+    // Hex tool event listeners
+    if (hexMinecraftText) hexMinecraftText.addEventListener('input', updateHexMinecraftPreview);
+    
     // Gradient event listeners
     if (gradientText) gradientText.addEventListener('input', generateGradient);
     if (gradientStartColor) gradientStartColor.addEventListener('change', generateGradient);
@@ -528,5 +578,89 @@ document.addEventListener('DOMContentLoaded', function() {
         if (navbar && navLinks && !navbar.contains(e.target) && navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
         }
+        
+        // Close minecraft dropdown when clicking outside
+        const minecraftDropdown = document.querySelector('.minecraft-nav-dropdown');
+        const minecraftMenu = document.getElementById('minecraftNavMenu');
+        
+        if (minecraftDropdown && minecraftMenu && !minecraftDropdown.contains(e.target) && minecraftMenu.classList.contains('open')) {
+            minecraftMenu.classList.remove('open');
+            document.querySelector('.minecraft-nav-button').classList.remove('active');
+        }
     });
 });
+
+/**
+ * Minecraft Navigation Functions
+ */
+
+// Toggle minecraft dropdown menu
+function toggleMinecraftDropdown() {
+    const menu = document.getElementById('minecraftNavMenu');
+    const button = document.querySelector('.minecraft-nav-button');
+    
+    if (menu && button) {
+        menu.classList.toggle('open');
+        button.classList.toggle('active');
+    }
+}
+
+// Show specific minecraft tool
+function showMinecraftTool(toolName) {
+    // Hide all minecraft tools
+    document.querySelectorAll('.minecraft-tool').forEach(tool => {
+        tool.classList.remove('active');
+    });
+    
+    // Remove active class from all nav items
+    document.querySelectorAll('.minecraft-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Show selected tool
+    const selectedTool = document.getElementById(`minecraft-${toolName}`);
+    if (selectedTool) {
+        selectedTool.classList.add('active');
+    }
+    
+    // Mark nav item as active
+    const selectedNavItem = document.querySelector(`[onclick="showMinecraftTool('${toolName}')"]`);
+    if (selectedNavItem) {
+        selectedNavItem.classList.add('active');
+    }
+    
+    // Update dropdown button text
+    const currentToolSpan = document.getElementById('currentMinecraftTool');
+    if (currentToolSpan && selectedNavItem) {
+        currentToolSpan.textContent = selectedNavItem.textContent;
+    }
+    
+    // Close dropdown
+    const menu = document.getElementById('minecraftNavMenu');
+    const button = document.querySelector('.minecraft-nav-button');
+    if (menu && button) {
+        menu.classList.remove('open');
+        button.classList.remove('active');
+    }
+}
+
+// Clear functions for each tool
+function clearHexMinecraft() {
+    const hexText = document.getElementById('hexMinecraftText');
+    const hexPreview = document.getElementById('hexMinecraftPreview');
+    const hexCode = document.getElementById('hexMinecraftCode');
+    
+    if (hexText) hexText.value = '';
+    if (hexPreview) hexPreview.textContent = 'Start typing to see your colorful Minecraft text here...';
+    if (hexCode) hexCode.innerHTML = '<button class="copy-btn" onclick="copyText(\'hexMinecraftCode\')">Copy</button><span class="example-text">Minecraft hex color codes will appear here...</span>';
+}
+
+function clearGradient() {
+    const gradientTextInput = document.getElementById('gradientText');
+    const gradientPreviewEl = document.getElementById('gradientPreview');
+    const gradientCodeEl = document.getElementById('gradientCode');
+    
+    if (gradientTextInput) gradientTextInput.value = '';
+    if (gradientPreviewEl) gradientPreviewEl.textContent = 'Gradient preview will appear here...';
+    if (gradientCodeEl) gradientCodeEl.innerHTML = '<button class="copy-btn" onclick="copyText(\'gradientCode\')">Copy</button><span class="example-text">Gradient color codes will appear here...</span>';
+}
