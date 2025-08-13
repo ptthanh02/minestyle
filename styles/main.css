@@ -260,7 +260,7 @@ textarea:focus {
     min-height: 100px;
     font-size: 16px;
     line-height: 1.5;
-    cursor: text;
+    cursor: pointer;
     position: relative;
     transition: all 0.3s ease;
     word-wrap: break-word;
@@ -268,10 +268,13 @@ textarea:focus {
     overflow-wrap: break-word;
     white-space: pre-wrap;
     max-width: 100%;
+    text-align: left;
+    vertical-align: top;
 }
 
 .output-text:hover {
     border-color: #667eea;
+    background: #f8f9ff;
 }
 
 .css-small-caps {
@@ -594,6 +597,8 @@ textarea:focus {
     font-style: italic;
     color: #888;
     margin-top: 5px;
+    display: block;
+    text-align: left;
 }
 
 /* Gradient Text Generator - Modern Style */

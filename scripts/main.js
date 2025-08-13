@@ -181,7 +181,7 @@ function generateGradient() {
     const formattedGradientCode = convertColorFormat(gradientCode, selectedFormat);
     
     document.getElementById('gradientCode').innerHTML = 
-        `<button class="copy-btn" onclick="copyText('gradientCode')">Copy</button>${formattedGradientCode}`;
+        `<button class="copy-btn" onclick="copyText('gradientCode')">Copy</button>${escapeHtml(formattedGradientCode)}`;
 }
 
 function copyGradientCode() {
@@ -436,8 +436,8 @@ function updateMinecraftPreview() {
     const selectedFormat = formatSelect ? formatSelect.value : '&';
     const formattedText = convertColorFormat(text, selectedFormat);
     
-    // Update code output
-    minecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>${formattedText}`;
+    // Update code output - escape HTML to show actual characters
+    minecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('minecraftCode')">Copy</button>${escapeHtml(formattedText)}`;
 }
 
 function updateHexPreview() {
@@ -476,8 +476,8 @@ function updateHexMinecraftPreview() {
     const selectedFormat = formatSelect ? formatSelect.value : '&';
     const formattedText = convertColorFormat(text, selectedFormat);
     
-    // Update code output
-    if (hexMinecraftCode) hexMinecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>${formattedText}`;
+    // Update code output - escape HTML to show actual characters
+    if (hexMinecraftCode) hexMinecraftCode.innerHTML = `<button class="copy-btn" onclick="copyText('hexMinecraftCode')">Copy</button>${escapeHtml(formattedText)}`;
 }
 
 /**
@@ -489,8 +489,42 @@ function copyText(outputId) {
     
     // Get text content excluding the button
     let textContent;
-    if (outputId === 'minecraftCode') {
-        textContent = minecraftText.value;
+    if (outputId === 'minecraftCode' || outputId === 'hexMinecraftCode' || outputId === 'gradientCode') {
+        // For code outputs, get the actual text from the corresponding input
+        if (outputId === 'minecraftCode') {
+            const formatSelect = document.getElementById('minecraftCodeFormat');
+            const selectedFormat = formatSelect ? formatSelect.value : '&';
+            textContent = convertColorFormat(minecraftText.value, selectedFormat);
+        } else if (outputId === 'hexMinecraftCode') {
+            const formatSelect = document.getElementById('hexCodeFormat');
+            const selectedFormat = formatSelect ? formatSelect.value : '&';
+            textContent = convertColorFormat(hexMinecraftText.value, selectedFormat);
+        } else if (outputId === 'gradientCode') {
+            const text = gradientText.value.trim();
+            const startColor = gradientStartColor.value;
+            const endColor = gradientEndColor.value;
+            
+            if (!text) return;
+            
+            let gradientCode = '';
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === ' ') {
+                    gradientCode += ' ';
+                    continue;
+                }
+                
+                const factor = text.length === 1 ? 0 : i / (text.length - 1);
+                const interpolatedColor = interpolateColor(startColor, endColor, factor);
+                const hexCode = '§#' + interpolatedColor.substring(1).toUpperCase();
+                
+                gradientCode += hexCode + char;
+            }
+            
+            const formatSelect = document.getElementById('gradientCodeFormat');
+            const selectedFormat = formatSelect ? formatSelect.value : '&';
+            textContent = convertColorFormat(gradientCode, selectedFormat);
+        }
     } else {
         textContent = element.childNodes[1].textContent || element.textContent.replace('Copy', '').trim();
     }
@@ -521,6 +555,25 @@ function copyText(outputId) {
             button.classList.remove('copied');
         }, 2000);
     });
+}
+
+// Function to make output text areas clickable to copy
+function makeOutputClickable(outputId) {
+    const element = document.getElementById(outputId);
+    if (element) {
+        element.addEventListener('click', function(e) {
+            // Don't trigger if clicking the copy button
+            if (e.target.classList.contains('copy-btn')) {
+                return;
+            }
+            
+            // Only copy if there's actual content (not placeholder)
+            const hasContent = !element.querySelector('.example-text');
+            if (hasContent) {
+                copyText(outputId);
+            }
+        });
+    }
 }
 
 function clearAll() {
@@ -558,6 +611,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (gradientText) gradientText.addEventListener('input', generateGradient);
     if (gradientStartColor) gradientStartColor.addEventListener('change', generateGradient);
     if (gradientEndColor) gradientEndColor.addEventListener('change', generateGradient);
+    
+    // Make output text areas clickable to copy
+    makeOutputClickable('cssOutput');
+    makeOutputClickable('unicodeOutput');
+    makeOutputClickable('minecraftCode');
+    makeOutputClickable('hexMinecraftCode');
+    makeOutputClickable('gradientCode');
     
     // Sync color picker with hex input
     if (colorPicker) {
@@ -689,6 +749,12 @@ function convertColorFormat(text, targetFormat) {
         // Convert & to §
         return text.replace(/&/g, '§');
     }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function updateHexOutput() {
