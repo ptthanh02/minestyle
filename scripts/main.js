@@ -813,6 +813,22 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.opacity = '1';
     }, 100);
 
+    // Initialize 3D viewer if Three.js is available
+    if (typeof THREE !== 'undefined') {
+        console.log('Three.js detected, 3D viewer ready for initialization...');
+        // The 3D viewer will be initialized when a user searches for a player
+    } else {
+        console.warn('Three.js not loaded, 3D viewer will not be available');
+        // Hide 3D viewer if Three.js is not available
+        const modelViewer = document.getElementById('minecraftModel3D');
+        if (modelViewer) {
+            const container = modelViewer.closest('.skin-preview-card');
+            if (container) {
+                container.style.display = 'none';
+            }
+        }
+    }
+
     // Add obfuscation animation for magic text
     setInterval(() => {
         if (minecraftText && minecraftText.value.includes('§k')) {
@@ -894,6 +910,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Cleanup 3D viewer when page unloads
+    window.addEventListener('beforeunload', cleanup3DViewer);
 
     // Handle Enter key in inputs
     ['hexInput', 'gradientText'].forEach(inputId => {
@@ -1893,143 +1912,6 @@ async function copySkinUrl() {
         console.error('Error copying skin URL:', error);
         showToast('Failed to copy skin URL', 'error');
     }
-}
-
-/**
- * 3D Model state tracking
- */
-let modelRotation = 0; // Current rotation angle in degrees
-let modelZoom = 1; // Current zoom level
-let isMouseDown = false;
-let lastMouseX = 0;
-let lastMouseY = 0;
-
-/**
- * Generate 3D model preview with enhanced interactivity
- */
-function generate3DModel(skinUrl, skinType) {
-    const modelViewer = document.getElementById('modelViewer');
-    if (!modelViewer) return;
-    
-    // Reset model state
-    modelRotation = 0;
-    modelZoom = 1;
-    
-    // Create interactive 3D model container
-    modelViewer.innerHTML = `
-        <div style="text-align: center; color: white; position: relative;">
-            <div id="modelContainer" style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px; cursor: grab; user-select: none; overflow: hidden;">
-                <img id="modelImage" src="https://crafatar.com/renders/body/${currentPlayerData.id}?size=256&overlay" 
-                     alt="3D Player Model" 
-                     style="image-rendering: pixelated; max-width: 150px; height: auto; transition: transform 0.3s ease; transform: rotate(${modelRotation}deg) scale(${modelZoom});">
-            </div>
-            <p style="font-size: 0.9rem; opacity: 0.8;">3D Model Preview</p>
-            <p style="font-size: 0.8rem; opacity: 0.6;">Rendered by Crafatar • Click and drag to rotate • Mouse wheel to zoom</p>
-        </div>
-    `;
-    
-    // Add mouse interaction events
-    setupModelInteraction();
-}
-
-/**
- * Setup mouse and touch interaction for 3D model
- */
-function setupModelInteraction() {
-    const modelContainer = document.getElementById('modelContainer');
-    const modelImage = document.getElementById('modelImage');
-    
-    if (!modelContainer || !modelImage) return;
-    
-    // Mouse events
-    modelContainer.addEventListener('mousedown', (e) => {
-        isMouseDown = true;
-        lastMouseX = e.clientX;
-        lastMouseY = e.clientY;
-        modelContainer.style.cursor = 'grabbing';
-        e.preventDefault();
-    });
-    
-    document.addEventListener('mouseup', () => {
-        isMouseDown = false;
-        if (modelContainer) {
-            modelContainer.style.cursor = 'grab';
-        }
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-        if (!isMouseDown) return;
-        
-        const deltaX = e.clientX - lastMouseX;
-        modelRotation += deltaX * 0.5; // Adjust sensitivity
-        
-        updateModelTransform();
-        
-        lastMouseX = e.clientX;
-        lastMouseY = e.clientY;
-    });
-    
-    // Mouse wheel for zoom
-    modelContainer.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const zoomDelta = e.deltaY > 0 ? -0.1 : 0.1;
-        modelZoom = Math.max(0.5, Math.min(3, modelZoom + zoomDelta));
-        updateModelTransform();
-    });
-    
-    // Touch events for mobile
-    modelContainer.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-            isMouseDown = true;
-            lastMouseX = e.touches[0].clientX;
-            lastMouseY = e.touches[0].clientY;
-            e.preventDefault();
-        }
-    });
-    
-    document.addEventListener('touchend', () => {
-        isMouseDown = false;
-    });
-    
-    document.addEventListener('touchmove', (e) => {
-        if (!isMouseDown || e.touches.length !== 1) return;
-        
-        const deltaX = e.touches[0].clientX - lastMouseX;
-        modelRotation += deltaX * 0.5;
-        
-        updateModelTransform();
-        
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
-        e.preventDefault();
-    });
-}
-
-/**
- * Update model transform based on current rotation and zoom
- */
-function updateModelTransform() {
-    const modelImage = document.getElementById('modelImage');
-    if (modelImage) {
-        modelImage.style.transform = `rotate(${modelRotation}deg) scale(${modelZoom})`;
-    }
-}
-
-/**
- * Enhanced model rotation controls
- */
-function rotateModel(direction) {
-    const rotationAmount = direction === 'left' ? -90 : 90;
-    modelRotation += rotationAmount;
-    updateModelTransform();
-    showToast(`Rotated model ${direction}`, 'success');
-}
-
-function resetModel() {
-    modelRotation = 0;
-    modelZoom = 1;
-    updateModelTransform();
-    showToast('Model view reset', 'success');
 }
 
 /**

@@ -117,7 +117,8 @@ body {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    align-items: center;
 }
 
 .nav-link {
@@ -132,6 +133,11 @@ body {
     letter-spacing: 0.01em;
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
 }
 
 .nav-link::before {
@@ -1289,6 +1295,20 @@ textarea::placeholder {
 
 /* Enhanced Mobile Responsive */
 @media (max-width: 1024px) {
+    .nav-links {
+        gap: var(--spacing-xs);
+    }
+    
+    .nav-link {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+    }
+    
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+}
+@media (max-width: 1024px) {
     .container {
         padding: 0 var(--spacing-md);
     }
@@ -1335,10 +1355,19 @@ textarea::placeholder {
         padding: var(--spacing-md);
         border-radius: 0 0 var(--border-radius) var(--border-radius);
         box-shadow: var(--glass-shadow);
+        gap: var(--spacing-xs);
     }
 
     .nav-links.active {
         display: flex;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: center;
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-sm);
+        font-size: 1rem;
     }
 
     .mobile-menu-btn {
@@ -1406,10 +1435,21 @@ textarea::placeholder {
 @media (max-width: 480px) {
     .nav-container {
         height: 60px;
+        padding: 0 var(--spacing-sm);
     }
 
     .logo {
         font-size: 1.8rem;
+    }
+
+    .nav-link {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    .mobile-menu-btn {
+        padding: var(--spacing-xs);
+        font-size: 1.5rem;
     }
 
     .page-section {
@@ -1762,10 +1802,7 @@ select:focus {
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 350px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
     position: relative;
@@ -1774,16 +1811,45 @@ select:focus {
 
 .model-placeholder {
     width: 100%;
-    height: 100%;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     color: rgba(255, 255, 255, 0.7);
+    position: relative;
+}
+
+.model-info {
+    margin-top: var(--spacing-sm);
+    text-align: center;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#minecraftModel3D {
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    cursor: grab;
+}
+
+#minecraftModel3D:active {
+    cursor: grabbing;
 }
 
 .model-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.8);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
 }
 
 .loading-spinner {

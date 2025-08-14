@@ -16,6 +16,9 @@
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
     
+    <!-- Three.js for 3D Skin Viewer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <!-- Meta Tags for Social Sharing -->
     <meta property="og:title" content="MineStyle - Professional Text Converter">
     <meta property="og:description" content="Create beautiful small caps text and colorful Minecraft text with live preview. Modern, fast, and mobile-friendly.">
@@ -32,7 +35,7 @@
             <a href="https://ptthanh02.github.io/MineStyle/" class="logo">MineStyle</a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" class="nav-link active" onclick="showSection('smallcaps', this); return false;">Small Caps</a></li>
-                <li><a href="#" class="nav-link" onclick="showSection('minecraft', this); return false;">Minecraft Tools</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('minecraft', this); return false;">Minecraft Colors</a></li>
                 <li><a href="#" class="nav-link" onclick="showSection('skinchecker', this); return false;">Skin Checker</a></li>
                 <li><a href="#" class="nav-link" onclick="showSection('about', this); return false;">About</a></li>
             </ul>
@@ -417,16 +420,23 @@
                             </div>
                             <div class="model-viewer-container">
                                 <div class="model-placeholder" id="modelViewer">
-                                    <div class="model-loading">
+                                    <canvas id="minecraftModel3D" style="width: 100%; height: 300px; border-radius: 8px; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);"></canvas>
+                                    <div class="model-loading" id="modelLoading" style="display: none;">
                                         <div class="loading-spinner"></div>
                                         <p>Loading 3D model...</p>
                                     </div>
                                 </div>
+                                <div class="model-info">
+                                    <small style="color: #666; font-size: 0.8rem;">
+                                        • Left click + drag to rotate • Right click + drag to pan • Mouse wheel to zoom<br>
+                                        • Touch: One finger to rotate, two fingers to zoom/pan
+                                    </small>
+                                </div>
                             </div>
                             <div class="model-controls">
-                                <button class="model-btn" onclick="rotateModel('left')">↺ Rotate Left</button>
-                                <button class="model-btn" onclick="rotateModel('right')">↻ Rotate Right</button>
-                                <button class="model-btn" onclick="resetModel()">🔄 Reset View</button>
+                                <button class="model-btn" onclick="resetModelView()">🔄 Reset View</button>
+                                <button class="model-btn" onclick="toggleAnimation()">🎬 Animate</button>
+                                <button class="model-btn" onclick="toggleWireframe()">� Wireframe</button>
                             </div>
                         </div>
                     </div>
@@ -550,6 +560,7 @@
         </div>
     </div>
 
+    <script src="scripts/minecraft3d.js"></script>
     <script src="scripts/main.js"></script>
 </body>
 </html>
