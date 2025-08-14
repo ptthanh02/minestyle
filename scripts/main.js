@@ -2123,20 +2123,6 @@ function resetModelView() {
 }
 
 /**
- * Toggle animation (placeholder - not applicable to image-based model)
- */
-function toggleAnimation() {
-    showToast('Animation feature not available in image-based mode', 'info');
-}
-
-/**
- * Toggle wireframe (placeholder - not applicable to image-based model) 
- */
-function toggleWireframe() {
-    showToast('Wireframe feature not available in image-based mode', 'info');
-}
-
-/**
  * Generate 3D model preview with enhanced interactivity and robust fallback system
  */
 function generate3DModel(skinUrl, skinType) {
@@ -2268,16 +2254,18 @@ function createModelHTML(imageUrl, skinType, sourceNumber) {
     const sourceLabel = sourceLabels[sourceNumber] || 'Alternative Source';
     
     return `
-        <div style="text-align: center; color: white; position: relative;">
-            <div id="modelContainer" style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px; cursor: grab; user-select: none; overflow: hidden;">
+        <div style="text-align: center; color: white; position: relative; padding: 10px;">
+            <div id="modelContainer" style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; margin-bottom: 15px; cursor: grab; user-select: none; overflow: visible; min-height: 250px; display: flex; align-items: center; justify-content: center;">
                 <img id="modelImage" 
                      src="${imageUrl}" 
                      alt="3D Player Model" 
-                     style="image-rendering: pixelated; max-width: 150px; height: auto; transition: transform 0.3s ease; transform: rotate(${modelRotation}deg) scale(${modelZoom});"
+                     style="image-rendering: pixelated; max-width: 200px; max-height: 300px; width: auto; height: auto; transition: transform 0.3s ease; transform: rotate(${modelRotation}deg) scale(${modelZoom});"
                      onerror="handleModelImageError(this)">
             </div>
-            <p style="font-size: 0.9rem; opacity: 0.8;">3D Model Preview</p>
-            <p style="font-size: 0.8rem; opacity: 0.6;">Rendered by ${sourceLabel} • Click and drag to rotate • Mouse wheel to zoom</p>
+            <div style="margin-bottom: 10px;">
+                <p style="font-size: 0.9rem; opacity: 0.8; margin: 5px 0; word-wrap: break-word;">3D Model Preview</p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin: 5px 0; word-wrap: break-word; line-height: 1.4;">Rendered by ${sourceLabel}<br>Click and drag to rotate • Mouse wheel to zoom</p>
+            </div>
         </div>
     `;
 }
@@ -2328,9 +2316,10 @@ function handleModelImageError(img) {
     const container = img.parentElement;
     if (container) {
         container.innerHTML = `
-            <div style="padding: 40px; color: rgba(255,255,255,0.6);">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🚫</div>
-                <p>Image failed to load</p>
+            <div style="padding: 40px; color: rgba(255,255,255,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px;">
+                <div style="font-size: 2rem; margin-bottom: 15px;">🚫</div>
+                <p style="text-align: center; word-wrap: break-word; margin: 0;">Image failed to load</p>
+                <p style="font-size: 0.8rem; text-align: center; opacity: 0.6; margin-top: 10px;">Please try refreshing or check your connection</p>
             </div>
         `;
     }

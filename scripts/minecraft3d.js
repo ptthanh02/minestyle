@@ -485,24 +485,6 @@ function resetModelView() {
     }
 }
 
-function toggleAnimation() {
-    if (minecraftViewer) {
-        const isAnimating = minecraftViewer.toggleAnimation();
-        if (typeof showToast === 'function') {
-            showToast(isAnimating ? 'Animation enabled' : 'Animation disabled', 'success');
-        }
-    }
-}
-
-function toggleWireframe() {
-    if (minecraftViewer) {
-        const isWireframe = minecraftViewer.toggleWireframe();
-        if (typeof showToast === 'function') {
-            showToast(isWireframe ? 'Wireframe enabled' : 'Wireframe disabled', 'success');
-        }
-    }
-}
-
 function cleanup3DViewer() {
     if (minecraftViewer) {
         minecraftViewer.dispose();
