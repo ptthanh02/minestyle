@@ -243,7 +243,7 @@ function generateGradient() {
     }
     
     if (text.length > 50) {
-        alert('Text too long! Maximum 50 characters for gradient effect.');
+        showToast('Text too long! Maximum 50 characters for gradient effect.', 'warning');
         return;
     }
     
@@ -414,7 +414,7 @@ function applyHexColor() {
     }
     
     if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
-        alert('Please enter a valid hex color (e.g., #FF5555 or FF5555)');
+        showToast('Please enter a valid hex color (e.g., #FF5555 or FF5555)', 'error');
         return;
     }
     
@@ -1124,7 +1124,7 @@ function showMinecraftTool(toolName, event) {
     }
     
     // Mark nav item as active
-    const selectedNavItem = document.querySelector(`[onclick*="showMinecraftTool('${toolName}')"]`);
+    const selectedNavItem = document.querySelector(`.minecraft-nav-item[onclick*="${toolName}"]`);
     if (selectedNavItem) {
         selectedNavItem.classList.add('active');
         animations.pulse(selectedNavItem, 'rgba(102, 126, 234, 0.3)');
