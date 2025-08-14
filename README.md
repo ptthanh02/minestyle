@@ -5,13 +5,13 @@ A modern text formatting tool for Minecraft server creators and content writers.
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-blue)](https://ptthanh02.github.io/MineStyle)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-<img width="1919" height="923" alt="image" src="https://github.com/user-attachments/assets/e34a3b89-0b80-4516-a26e-2b5fedc145ed" />
+<img width="1902" height="914" alt="image" src="https://github.com/user-attachments/assets/a2797ca8-ecd4-4e97-b217-fe759c633102" />
 
 ## 🌟 Features
 
 ### 📝 Small Caps Converter
-- **CSS Small Caps**: Web-optimized formatting for websites
 - **Unicode Small Caps**: Universal format that works everywhere
+- **CSS Small Caps**: Web-optimized formatting for websites
 - Live preview and one-click copy functionality
 
 ### ⛏️ Minecraft Text Formatting
