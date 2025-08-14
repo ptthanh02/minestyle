@@ -1898,6 +1898,40 @@ select:focus {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+.model-error {
+    color: var(--text-primary);
+}
+
+.model-error h4 {
+    margin: 0 0 10px 0;
+    color: #ff6b6b;
+}
+
+.model-error p {
+    margin: 0 0 15px 0;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.model-error ul {
+    text-align: left;
+    margin: 10px 0;
+    padding-left: 20px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.model-error .model-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    border: none;
+    margin-top: 10px;
+}
+
+.model-error .model-btn:hover {
+    background: linear-gradient(135deg, #ff5252 0%, #e53e3e 100%);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
 /* Skin Info Grid */
 .skin-info-grid {
     display: grid;

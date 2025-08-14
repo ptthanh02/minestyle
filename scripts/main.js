@@ -45,6 +45,13 @@ const gradientEndColor = getElement('gradientEndColor');
 const gradientPreview = getElement('gradientPreview');
 const gradientCode = getElement('gradientCode');
 
+// 3D Model interaction variables
+let modelRotation = 0;
+let modelZoom = 1;
+let isMouseDown = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
 // Enhanced preset templates with more variety
 const presetTemplates = {
     welcome: '§e✨ §bWelcome to §a§lOur Server§r§e! §6Enjoy your stay! §e✨',
@@ -1995,6 +2002,351 @@ async function copyColorHex(hex) {
         console.error('Error copying color:', error);
         showToast('Failed to copy color', 'error');
     }
+}
+
+/**
+ * Setup mouse and touch interaction for 3D model
+ */
+function setupModelInteraction() {
+    const modelContainer = document.getElementById('modelContainer');
+    const modelImage = document.getElementById('modelImage');
+    
+    if (!modelContainer || !modelImage) return;
+    
+    // Mouse events
+    modelContainer.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        modelContainer.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        const container = document.getElementById('modelContainer');
+        if (container) {
+            container.style.cursor = 'grab';
+        }
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isMouseDown) return;
+        
+        const deltaX = e.clientX - lastMouseX;
+        modelRotation += deltaX * 0.5; // Adjust sensitivity
+        
+        updateModelTransform();
+        
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+    });
+    
+    // Mouse wheel for zoom
+    modelContainer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomDelta = e.deltaY > 0 ? -0.1 : 0.1;
+        modelZoom = Math.max(0.5, Math.min(3, modelZoom + zoomDelta));
+        updateModelTransform();
+    });
+    
+    // Touch events for mobile
+    modelContainer.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            isMouseDown = true;
+            lastMouseX = e.touches[0].clientX;
+            lastMouseY = e.touches[0].clientY;
+            e.preventDefault();
+        }
+    });
+    
+    document.addEventListener('touchend', () => {
+        isMouseDown = false;
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+        if (!isMouseDown || e.touches.length !== 1) return;
+        
+        const deltaX = e.touches[0].clientX - lastMouseX;
+        modelRotation += deltaX * 0.5;
+        
+        updateModelTransform();
+        
+        lastMouseX = e.touches[0].clientX;
+        lastMouseY = e.touches[0].clientY;
+        e.preventDefault();
+    });
+}
+
+/**
+ * Update model transform based on current rotation and zoom
+ */
+function updateModelTransform() {
+    const modelImage = document.getElementById('modelImage');
+    if (modelImage) {
+        modelImage.style.transform = `rotate(${modelRotation}deg) scale(${modelZoom})`;
+    }
+}
+
+/**
+ * Enhanced model rotation controls
+ */
+function rotateModel(direction) {
+    const rotationAmount = direction === 'left' ? -90 : 90;
+    modelRotation += rotationAmount;
+    updateModelTransform();
+    showToast(`Rotated model ${direction}`, 'success');
+}
+
+function resetModel() {
+    modelRotation = 0;
+    modelZoom = 1;
+    updateModelTransform();
+    showToast('Model view reset', 'success');
+}
+
+/**
+ * Cleanup 3D viewer resources (placeholder for compatibility)
+ */
+function cleanup3DViewer() {
+    // Reset model state when page unloads
+    modelRotation = 0;
+    modelZoom = 1;
+    isMouseDown = false;
+}
+
+/**
+ * Reset model view (for button compatibility)
+ */
+function resetModelView() {
+    resetModel();
+}
+
+/**
+ * Toggle animation (placeholder - not applicable to image-based model)
+ */
+function toggleAnimation() {
+    showToast('Animation feature not available in image-based mode', 'info');
+}
+
+/**
+ * Toggle wireframe (placeholder - not applicable to image-based model) 
+ */
+function toggleWireframe() {
+    showToast('Wireframe feature not available in image-based mode', 'info');
+}
+
+/**
+ * Generate 3D model preview with enhanced interactivity and robust fallback system
+ */
+function generate3DModel(skinUrl, skinType) {
+    const modelViewer = document.getElementById('modelViewer');
+    if (!modelViewer) return;
+    
+    // Reset model state
+    modelRotation = 0;
+    modelZoom = 1;
+    
+    // Show loading state
+    modelViewer.innerHTML = `
+        <div class="model-loading" id="modelLoadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading 3D model...</p>
+        </div>
+    `;
+    
+    // Start the loading process with fallback system
+    loadModelWithFallback(modelViewer, skinUrl, skinType);
+}
+
+/**
+ * Load 3D model with robust fallback system
+ */
+async function loadModelWithFallback(modelViewer, skinUrl, skinType) {
+    const uuid = currentPlayerData?.id;
+    
+    // Fallback URLs in order of preference
+    const fallbackUrls = [
+        // Primary: Crafatar body render
+        `https://crafatar.com/renders/body/${uuid}?size=256&overlay`,
+        // Secondary: MC-Heads body render
+        `https://mc-heads.net/body/${uuid}`,
+        // Tertiary: Direct skin URL (if available)
+        skinUrl
+    ];
+    
+    let lastError = null;
+    let attemptCount = 0;
+    
+    for (const url of fallbackUrls) {
+        if (!url) continue;
+        
+        attemptCount++;
+        
+        try {
+            console.log(`Attempting to load 3D model from source ${attemptCount}:`, url);
+            
+            const success = await loadModelImage(modelViewer, url, skinType, attemptCount);
+            if (success) {
+                console.log('3D model loaded successfully from source', attemptCount);
+                return;
+            }
+        } catch (error) {
+            console.warn(`Failed to load from source ${attemptCount}:`, error.message);
+            lastError = error;
+            
+            // Add small delay between attempts
+            if (attemptCount < fallbackUrls.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+    }
+    
+    // All sources failed, show error with retry option
+    showModelError(modelViewer, lastError, skinType);
+}
+
+/**
+ * Load model image with timeout and proper event handling
+ */
+function loadModelImage(modelViewer, imageUrl, skinType, attemptNumber) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        
+        // Set up timeout (10 seconds)
+        const timeoutId = setTimeout(() => {
+            cleanup();
+            reject(new Error('Request timeout - image took too long to load'));
+        }, 10000);
+        
+        const cleanup = () => {
+            clearTimeout(timeoutId);
+            img.onload = null;
+            img.onerror = null;
+        };
+        
+        img.onload = function() {
+            cleanup();
+            
+            try {
+                // Create the interactive 3D model container
+                const modelHtml = createModelHTML(imageUrl, skinType, attemptNumber);
+                modelViewer.innerHTML = modelHtml;
+                
+                // Set up mouse interaction after DOM is updated
+                setTimeout(() => {
+                    setupModelInteraction();
+                }, 100);
+                
+                resolve(true);
+            } catch (error) {
+                reject(new Error('Failed to create model HTML: ' + error.message));
+            }
+        };
+        
+        img.onerror = function() {
+            cleanup();
+            reject(new Error('Failed to load image from ' + imageUrl));
+        };
+        
+        // Start loading
+        img.src = imageUrl;
+    });
+}
+
+/**
+ * Create the HTML for the interactive 3D model
+ */
+function createModelHTML(imageUrl, skinType, sourceNumber) {
+    const sourceLabels = {
+        1: 'Crafatar • 3D Body Render',
+        2: 'MC-Heads • 3D Body Render', 
+        3: 'Direct Skin • 2D Preview'
+    };
+    
+    const sourceLabel = sourceLabels[sourceNumber] || 'Alternative Source';
+    
+    return `
+        <div style="text-align: center; color: white; position: relative;">
+            <div id="modelContainer" style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px; cursor: grab; user-select: none; overflow: hidden;">
+                <img id="modelImage" 
+                     src="${imageUrl}" 
+                     alt="3D Player Model" 
+                     style="image-rendering: pixelated; max-width: 150px; height: auto; transition: transform 0.3s ease; transform: rotate(${modelRotation}deg) scale(${modelZoom});"
+                     onerror="handleModelImageError(this)">
+            </div>
+            <p style="font-size: 0.9rem; opacity: 0.8;">3D Model Preview</p>
+            <p style="font-size: 0.8rem; opacity: 0.6;">Rendered by ${sourceLabel} • Click and drag to rotate • Mouse wheel to zoom</p>
+        </div>
+    `;
+}
+
+/**
+ * Show error state with retry functionality
+ */
+function showModelError(modelViewer, error, skinType) {
+    console.error('All 3D model sources failed:', error);
+    
+    const errorHtml = `
+        <div class="model-error" style="text-align: center; color: white; padding: 20px;">
+            <div style="background: rgba(255, 107, 107, 0.2); border: 1px solid rgba(255, 107, 107, 0.4); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">😔</div>
+                <h4 style="margin: 0 0 10px 0; color: #ff6b6b;">3D Model Unavailable</h4>
+                <p style="margin: 0 0 15px 0; opacity: 0.8; font-size: 0.9rem;">
+                    Unable to load the 3D model from any available source.
+                </p>
+                <button onclick="retry3DModel('${skinType}')" 
+                        class="model-btn" 
+                        style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); border: none; margin-top: 10px;">
+                    🔄 Try Again
+                </button>
+            </div>
+            <div style="font-size: 0.8rem; opacity: 0.6;">
+                <p>Possible issues:</p>
+                <ul style="text-align: left; margin: 10px 0; padding-left: 20px;">
+                    <li>Network connectivity problems</li>
+                    <li>3D render services temporarily unavailable</li>
+                    <li>Player skin may be private or corrupted</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    modelViewer.innerHTML = errorHtml;
+}
+
+/**
+ * Handle individual model image errors (fallback within fallback)
+ */
+function handleModelImageError(img) {
+    console.warn('Model image failed to load:', img.src);
+    
+    // Replace with a fallback placeholder
+    img.style.display = 'none';
+    
+    const container = img.parentElement;
+    if (container) {
+        container.innerHTML = `
+            <div style="padding: 40px; color: rgba(255,255,255,0.6);">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🚫</div>
+                <p>Image failed to load</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Retry 3D model loading
+ */
+function retry3DModel(skinType) {
+    if (!currentPlayerData || !currentSkinUrl) {
+        showToast('No player data available to retry', 'warning');
+        return;
+    }
+    
+    showToast('Retrying 3D model loading...', 'info');
+    generate3DModel(currentSkinUrl, skinType);
 }
 
 /**
