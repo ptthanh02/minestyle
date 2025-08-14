@@ -2116,6 +2116,27 @@ function cleanup3DViewer() {
 }
 
 /**
+ * Reset model view (for button compatibility)
+ */
+function resetModelView() {
+    resetModel();
+}
+
+/**
+ * Toggle animation (placeholder - not applicable to image-based model)
+ */
+function toggleAnimation() {
+    showToast('Animation feature not available in image-based mode', 'info');
+}
+
+/**
+ * Toggle wireframe (placeholder - not applicable to image-based model) 
+ */
+function toggleWireframe() {
+    showToast('Wireframe feature not available in image-based mode', 'info');
+}
+
+/**
  * Generate 3D model preview with enhanced interactivity and robust fallback system
  */
 function generate3DModel(skinUrl, skinType) {
