@@ -1001,6 +1001,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Skin checker event listeners
+    const playerUsername = getElement('playerUsername');
+    if (playerUsername) {
+        playerUsername.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPlayer();
+            }
+        });
+    }
+    
     // Show welcome toast
     setTimeout(() => {
         showToast('Welcome to MineStyle! 🎨', 'info');
@@ -1193,5 +1203,391 @@ function updateGradientOutput() {
     const text = gradientText ? gradientText.value : '';
     if (text.trim() !== '') {
         generateGradient();
+    }
+}
+
+// ===========================
+// SKIN CHECKER FUNCTIONALITY
+// ===========================
+
+// Skin checker variables
+let currentPlayerData = null;
+let currentSkinUrl = null;
+
+/**
+ * Search for a Minecraft player by username
+ */
+async function searchPlayer() {
+    const usernameInput = document.getElementById('playerUsername');
+    const username = usernameInput.value.trim();
+    
+    if (!username) {
+        showToast('Please enter a username', 'warning');
+        usernameInput.focus();
+        return;
+    }
+    
+    // Validate username format
+    if (!/^[a-zA-Z0-9_]{1,16}$/.test(username)) {
+        showToast('Invalid username format. Use only letters, numbers, and underscores (1-16 characters)', 'error');
+        return;
+    }
+    
+    // Show loading state
+    showLoadingState();
+    
+    try {
+        // First, get the UUID from the username
+        const playerResponse = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+        
+        if (!playerResponse.ok) {
+            if (playerResponse.status === 204 || playerResponse.status === 404) {
+                showError('Player not found', `The username "${username}" does not exist in Minecraft Java Edition.`);
+                return;
+            }
+            throw new Error(`HTTP ${playerResponse.status}`);
+        }
+        
+        const playerData = await playerResponse.json();
+        currentPlayerData = playerData;
+        
+        // Get the skin data using the UUID
+        const profileResponse = await fetch(`https://sessionserver.mojang.com/session/minecraft/profile/${playerData.id}`);
+        
+        if (!profileResponse.ok) {
+            throw new Error(`Failed to fetch profile data: HTTP ${profileResponse.status}`);
+        }
+        
+        const profileData = await profileResponse.json();
+        
+        // Parse the textures from base64
+        let skinUrl = null;
+        let skinType = 'steve'; // default
+        
+        if (profileData.properties && profileData.properties.length > 0) {
+            const texturesProperty = profileData.properties.find(prop => prop.name === 'textures');
+            if (texturesProperty) {
+                const texturesData = JSON.parse(atob(texturesProperty.value));
+                if (texturesData.textures && texturesData.textures.SKIN) {
+                    skinUrl = texturesData.textures.SKIN.url;
+                    // Check if it's a slim skin (Alex model)
+                    if (texturesData.textures.SKIN.metadata && texturesData.textures.SKIN.metadata.model === 'slim') {
+                        skinType = 'alex';
+                    }
+                }
+            }
+        }
+        
+        // If no custom skin, use default
+        if (!skinUrl) {
+            // Use default Steve skin
+            skinUrl = 'https://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b';
+            skinType = 'steve';
+        }
+        
+        currentSkinUrl = skinUrl;
+        
+        // Display the player data
+        displayPlayerData(playerData, skinUrl, skinType);
+        
+        // Generate 3D model
+        generate3DModel(skinUrl, skinType);
+        
+        // Analyze skin colors
+        analyzeSkinColors(skinUrl);
+        
+        hapticFeedback.medium();
+        showToast(`Successfully loaded ${playerData.name}'s skin!`, 'success');
+        
+    } catch (error) {
+        console.error('Error fetching player data:', error);
+        showError('Connection Error', 'Failed to connect to Minecraft servers. Please check your internet connection and try again.');
+    }
+}
+
+/**
+ * Show loading state
+ */
+function showLoadingState() {
+    const skinDisplay = document.getElementById('skinDisplaySection');
+    const errorDisplay = document.getElementById('errorDisplay');
+    
+    if (skinDisplay) skinDisplay.style.display = 'block';
+    if (errorDisplay) errorDisplay.style.display = 'none';
+    
+    // Show loading in player info
+    const playerName = document.getElementById('playerName');
+    const playerUuid = document.getElementById('playerUuid');
+    const playerHead = document.getElementById('playerHead');
+    const fullSkinImage = document.getElementById('fullSkinImage');
+    
+    if (playerName) playerName.textContent = 'Loading...';
+    if (playerUuid) playerUuid.textContent = 'UUID: Loading...';
+    if (playerHead) {
+        playerHead.src = '';
+        playerHead.alt = 'Loading...';
+    }
+    if (fullSkinImage) {
+        fullSkinImage.src = '';
+        fullSkinImage.alt = 'Loading...';
+    }
+    
+    // Show loading in 3D model
+    const modelViewer = document.getElementById('modelViewer');
+    if (modelViewer) {
+        modelViewer.innerHTML = `
+            <div class="model-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading 3D model...</p>
+            </div>
+        `;
+    }
+    
+    // Show loading in color palette
+    const colorPalette = document.getElementById('colorPalette');
+    if (colorPalette) {
+        colorPalette.innerHTML = '<div class="color-loading">Analyzing skin colors...</div>';
+    }
+}
+
+/**
+ * Display player data
+ */
+function displayPlayerData(playerData, skinUrl, skinType) {
+    const playerName = document.getElementById('playerName');
+    const playerUuid = document.getElementById('playerUuid');
+    const playerHead = document.getElementById('playerHead');
+    const fullSkinImage = document.getElementById('fullSkinImage');
+    const skinTypeBadge = document.getElementById('skinTypeBadge');
+    const skinTypeInfo = document.getElementById('skinTypeInfo');
+    const skinResolution = document.getElementById('skinResolution');
+    const skinLastUpdated = document.getElementById('skinLastUpdated');
+    
+    if (playerName) playerName.textContent = playerData.name;
+    if (playerUuid) playerUuid.textContent = `UUID: ${playerData.id}`;
+    
+    // Set player head (using skin URL to generate head)
+    if (playerHead) {
+        playerHead.src = `https://crafatar.com/avatars/${playerData.id}?size=64&overlay`;
+        playerHead.alt = `${playerData.name}'s Head`;
+        playerHead.style.imageRendering = 'pixelated';
+    }
+    
+    // Set full skin image
+    if (fullSkinImage) {
+        fullSkinImage.src = skinUrl;
+        fullSkinImage.alt = `${playerData.name}'s Skin`;
+        fullSkinImage.style.imageRendering = 'pixelated';
+        fullSkinImage.style.maxWidth = '256px';
+        fullSkinImage.style.height = 'auto';
+    }
+    
+    // Update skin type badge and info
+    const isAlex = skinType === 'alex';
+    if (skinTypeBadge) {
+        skinTypeBadge.innerHTML = `<span class="badge">${isAlex ? 'Alex (Slim)' : 'Steve (Classic)'}</span>`;
+    }
+    if (skinTypeInfo) {
+        skinTypeInfo.textContent = isAlex ? 'Alex (Slim Arms)' : 'Steve (Classic)';
+    }
+    
+    // Set skin resolution (assuming 64x64 for now)
+    if (skinResolution) {
+        skinResolution.textContent = '64x64';
+    }
+    
+    // Set last updated (we don't have this info from the API, so show current time)
+    if (skinLastUpdated) {
+        skinLastUpdated.textContent = new Date().toLocaleDateString();
+    }
+}
+
+/**
+ * Show error message
+ */
+function showError(title, message) {
+    const skinDisplay = document.getElementById('skinDisplaySection');
+    const errorDisplay = document.getElementById('errorDisplay');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    if (skinDisplay) skinDisplay.style.display = 'none';
+    if (errorDisplay) errorDisplay.style.display = 'block';
+    if (errorMessage) errorMessage.textContent = message;
+}
+
+/**
+ * Download the current skin
+ */
+async function downloadSkin() {
+    if (!currentSkinUrl || !currentPlayerData) {
+        showToast('No skin loaded to download', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch(currentSkinUrl);
+        const blob = await response.blob();
+        
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${currentPlayerData.name}_skin.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        showToast('Skin downloaded successfully!', 'success');
+        hapticFeedback.light();
+        
+    } catch (error) {
+        console.error('Error downloading skin:', error);
+        showToast('Failed to download skin', 'error');
+    }
+}
+
+/**
+ * Copy skin URL to clipboard
+ */
+async function copySkinUrl() {
+    if (!currentSkinUrl) {
+        showToast('No skin URL to copy', 'warning');
+        return;
+    }
+    
+    try {
+        await navigator.clipboard.writeText(currentSkinUrl);
+        showToast('Skin URL copied to clipboard!', 'success');
+        hapticFeedback.light();
+    } catch (error) {
+        console.error('Error copying skin URL:', error);
+        showToast('Failed to copy skin URL', 'error');
+    }
+}
+
+/**
+ * Generate 3D model preview
+ */
+function generate3DModel(skinUrl, skinType) {
+    const modelViewer = document.getElementById('modelViewer');
+    if (!modelViewer) return;
+    
+    // For now, show a placeholder with skin preview
+    // In a real implementation, you would use a 3D library like Three.js
+    modelViewer.innerHTML = `
+        <div style="text-align: center; color: white;">
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                <img src="https://crafatar.com/renders/body/${currentPlayerData.id}?size=256&overlay" 
+                     alt="3D Player Model" 
+                     style="image-rendering: pixelated; max-width: 150px; height: auto;">
+            </div>
+            <p style="font-size: 0.9rem; opacity: 0.8;">3D Model Preview</p>
+            <p style="font-size: 0.8rem; opacity: 0.6;">Rendered by Crafatar</p>
+        </div>
+    `;
+}
+
+/**
+ * Model rotation controls (placeholder functions)
+ */
+function rotateModel(direction) {
+    showToast(`Rotating model ${direction}...`, 'info');
+    // In a real implementation, this would control the 3D model rotation
+}
+
+function resetModel() {
+    showToast('Model view reset', 'info');
+    // In a real implementation, this would reset the 3D model to default position
+}
+
+/**
+ * Analyze skin colors
+ */
+async function analyzeSkinColors(skinUrl) {
+    const colorPalette = document.getElementById('colorPalette');
+    if (!colorPalette) return;
+    
+    try {
+        // Create a canvas to analyze the skin colors
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            ctx.drawImage(img, 0, 0);
+            
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Extract unique colors
+            const colorMap = new Map();
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const a = data[i + 3];
+                
+                // Skip transparent pixels
+                if (a < 128) continue;
+                
+                const hex = rgbToHex(r, g, b);
+                colorMap.set(hex, (colorMap.get(hex) || 0) + 1);
+            }
+            
+            // Sort colors by frequency and take top 12
+            const sortedColors = Array.from(colorMap.entries())
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 12)
+                .map(([color]) => color);
+            
+            // Display color palette
+            colorPalette.innerHTML = sortedColors.map(color => 
+                `<div class="color-item-skin" 
+                      style="background-color: ${color};" 
+                      data-hex="${color}"
+                      onclick="copyColorHex('${color}')"
+                      title="Click to copy ${color}">
+                 </div>`
+            ).join('');
+        };
+        
+        img.onerror = function() {
+            colorPalette.innerHTML = '<div class="color-loading">Failed to analyze colors</div>';
+        };
+        
+        img.src = skinUrl;
+        
+    } catch (error) {
+        console.error('Error analyzing skin colors:', error);
+        colorPalette.innerHTML = '<div class="color-loading">Failed to analyze colors</div>';
+    }
+}
+
+/**
+ * Copy color hex value
+ */
+async function copyColorHex(hex) {
+    try {
+        await navigator.clipboard.writeText(hex);
+        showToast(`Copied ${hex} to clipboard!`, 'success');
+        hapticFeedback.light();
+    } catch (error) {
+        console.error('Error copying color:', error);
+        showToast('Failed to copy color', 'error');
+    }
+}
+
+/**
+ * Handle Enter key in username input
+ */
+function handleUsernameKeyPress(event) {
+    if (event.key === 'Enter') {
+        searchPlayer();
     }
 }

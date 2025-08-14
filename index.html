@@ -33,6 +33,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" class="nav-link active" onclick="showSection('smallcaps', this); return false;">Small Caps</a></li>
                 <li><a href="#" class="nav-link" onclick="showSection('minecraft', this); return false;">Minecraft Colors</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('skinchecker', this); return false;">Skin Checker</a></li>
                 <li><a href="#" class="nav-link" onclick="showSection('about', this); return false;">About</a></li>
             </ul>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
@@ -351,6 +352,135 @@
                         </div>
                         <div class="description">
                             Raw Minecraft gradient codes ready to paste into your server, plugin, or game.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skin Checker Section -->
+        <div id="skinchecker" class="page-section">
+            <h1 class="section-title">Minecraft Skin Checker</h1>
+            <p class="section-subtitle">View any Minecraft player's skin and download it instantly</p>
+            
+            <div class="input-section">
+                <div class="skin-search-section">
+                    <h3 style="margin-bottom: 15px; color: #333;">🔍 Player Search</h3>
+                    <div class="skin-input-group">
+                        <input type="text" id="playerUsername" class="username-input" placeholder="Enter Minecraft username..." maxlength="16">
+                        <button class="search-btn" onclick="searchPlayer()">Search Player</button>
+                    </div>
+                    <div class="search-tips">
+                        <small>💡 Tip: Enter any valid Minecraft username (Java Edition)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <div class="skin-display-section" id="skinDisplaySection" style="display: none;">
+                    <div class="player-info-card">
+                        <div class="player-header">
+                            <div class="player-avatar" id="playerAvatar">
+                                <img id="playerHead" src="" alt="Player Head" style="width: 64px; height: 64px; image-rendering: pixelated;">
+                            </div>
+                            <div class="player-details">
+                                <h3 id="playerName">Loading...</h3>
+                                <p id="playerUuid">UUID: Loading...</p>
+                                <div class="skin-type-badge" id="skinTypeBadge">
+                                    <span class="badge">Classic</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skin-preview-grid">
+                        <div class="skin-preview-card">
+                            <div class="skin-preview-title">
+                                Full Skin Preview <span class="badge">2D View</span>
+                            </div>
+                            <div class="skin-canvas-container">
+                                <img id="fullSkinImage" src="" alt="Full Skin" style="image-rendering: pixelated; max-width: 100%; height: auto; border-radius: 8px;">
+                            </div>
+                            <div class="skin-actions">
+                                <button class="download-btn" onclick="downloadSkin()">
+                                    📥 Download Skin
+                                </button>
+                                <button class="copy-url-btn" onclick="copySkinUrl()">
+                                    🔗 Copy Skin URL
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="skin-preview-card">
+                            <div class="skin-preview-title">
+                                3D Model Preview <span class="badge">Interactive</span>
+                            </div>
+                            <div class="model-viewer-container">
+                                <div class="model-placeholder" id="modelViewer">
+                                    <div class="model-loading">
+                                        <div class="loading-spinner"></div>
+                                        <p>Loading 3D model...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="model-controls">
+                                <button class="model-btn" onclick="rotateModel('left')">↺ Rotate Left</button>
+                                <button class="model-btn" onclick="rotateModel('right')">↻ Rotate Right</button>
+                                <button class="model-btn" onclick="resetModel()">🔄 Reset View</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skin-info-grid">
+                        <div class="skin-info-card">
+                            <div class="info-title">
+                                📊 Skin Information
+                            </div>
+                            <div class="info-content">
+                                <div class="info-item">
+                                    <span class="info-label">Resolution:</span>
+                                    <span class="info-value" id="skinResolution">64x64</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Format:</span>
+                                    <span class="info-value">PNG</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Type:</span>
+                                    <span class="info-value" id="skinTypeInfo">Steve/Alex</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Last Updated:</span>
+                                    <span class="info-value" id="skinLastUpdated">Unknown</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skin-info-card">
+                            <div class="info-title">
+                                🎨 Color Palette
+                            </div>
+                            <div class="color-palette-container" id="colorPalette">
+                                <div class="color-loading">Analyzing skin colors...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="error-display" id="errorDisplay" style="display: none;">
+                    <div class="error-card">
+                        <div class="error-icon">❌</div>
+                        <div class="error-title">Player Not Found</div>
+                        <div class="error-message" id="errorMessage">
+                            The username you entered could not be found. Please check the spelling and try again.
+                        </div>
+                        <div class="error-suggestions">
+                            <h4>Suggestions:</h4>
+                            <ul>
+                                <li>Make sure the username is spelled correctly</li>
+                                <li>Check if the player exists in Minecraft Java Edition</li>
+                                <li>Try a different username</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
