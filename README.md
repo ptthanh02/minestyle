@@ -2,7 +2,7 @@
 
 A modern text formatting tool for Minecraft server creators and content writers. Transform plain text into elegant small caps or vibrant Minecraft color codes with an intuitive, professional interface.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-blue)](https://ptthanh02.github.io/MineStyle)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-blue)](https://ptthanh02.github.io/minestyle)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 <img width="1902" height="914" alt="image" src="https://github.com/user-attachments/assets/a2797ca8-ecd4-4e97-b217-fe759c633102" />
@@ -24,7 +24,7 @@ A modern text formatting tool for Minecraft server creators and content writers.
 
 ## 🚀 Quick Start
 
-1. **Visit**: [https://ptthanh02.github.io/MineStyle](https://ptthanh02.github.io/MineStyle)
+1. **Visit**: [https://ptthanh02.github.io/minestyle](https://ptthanh02.github.io/minestyle)
 2. **Choose** your formatting tool from the navigation menu
 3. **Type** your text and apply colors/formatting
 4. **Copy** the formatted result with one click
@@ -34,7 +34,7 @@ A modern text formatting tool for Minecraft server creators and content writers.
 
 ```bash
 # Clone the repository
-git clone https://github.com/ptthanh02/MineStyle.git
+git clone https://github.com/ptthanh02/minestyle.git
 cd MineStyle
 
 # Start a local server
